@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 
 import { Button, Menu, MenuItem, Pagination, Stack, Typography, Grid, styled } from '@mui/material';

@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo, useState, memo, useCallback, useEffect, useRef } from 'react';
 import useStyles from './styles';
 

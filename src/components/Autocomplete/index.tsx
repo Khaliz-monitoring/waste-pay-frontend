@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useMemo, isValidElement, useRef, useEffect } from 'react';
 
 import {
@@ -30,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
    },
    appAutocomplete__chip__container: {
       height: '19px !important',
-      fontSize: theme.typography.body2.fontSize,
-      backgroundColor: `${theme.palette.grey[200]} !important`,
+      // fontSize: theme.typography.body2.fontSize,
+      // backgroundColor: `${theme.palette.grey[200]} !important`,
       borderRadius: '8px !important',
       maxWidth: 'calc(100% - 30px)!important',
    },
@@ -230,8 +232,7 @@ AppAutocomplete.defaultProps = {
    disableClearable: true,
    renderOption(prop, option) {
       return option?.description;
-   },
-   getOptionLabel(option) {
+      AppAutocomplete;
       return option.description;
    },
 };

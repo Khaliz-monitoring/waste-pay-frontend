@@ -1,7 +1,9 @@
+'use client';
+
 import { forwardRef } from 'react';
 import { useController } from 'react-hook-form';
 
-import { AppTextField } from '@/components/index';
+import AppTextField from '@/components/TextField';
 import _ from 'lodash';
 
 import type { ControlledTextFieldProps } from './type';

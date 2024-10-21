@@ -1,3 +1,5 @@
+'use client';
+
 import { formatNumber, formatNumberPercentage } from '@/utils/formatCell';
 
 export default function CellColor({ color, value }) {

@@ -1,3 +1,5 @@
+'use client';
+
 import { DataGridPro, DataGridProProps } from '@mui/x-data-grid-pro';
 
 export interface DataTableProps extends DataGridProProps {

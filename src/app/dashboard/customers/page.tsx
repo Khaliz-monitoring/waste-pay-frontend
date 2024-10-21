@@ -10,6 +10,9 @@ import { CustomersFilters } from '@/components/dashboard/customer/customers-filt
 import type { Customer } from '@/components/dashboard/customer/customers-table';
 import { CustomersTable } from '@/components/dashboard/customer/customers-table';
 import { config } from '@/config';
+import AppDataTable from '@/components/DataTable/AppDataGridPro';
+import { Grid, Paper } from '@mui/material';
+import { DataTablePagination } from '@/components';
 
 export const metadata = { title: `Customers | Dashboard | ${config.site.name}` } satisfies Metadata;
 
@@ -135,13 +138,131 @@ const customers = [
       address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
       createdAt: dayjs().subtract(2, 'hours').toDate(),
    },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
+   {
+      id: 'USR-001',
+      name: 'Miron Vitold',
+      avatar: '/assets/avatar-1.png',
+      email: 'miron.vitold@devias.io',
+      phone: '972-333-4106',
+      address: { city: 'San Diego', country: 'USA', state: 'California', street: '75247' },
+      createdAt: dayjs().subtract(2, 'hours').toDate(),
+   },
 ] satisfies Customer[];
 
 export default function Page(): React.JSX.Element {
    const page = 0;
    const rowsPerPage = 5;
 
-   const paginatedCustomers = applyPagination(customers, page, rowsPerPage);
+   const heightComponentExcludingTable = 0;
+
+   const columns = [
+      {
+         field: 'name',
+         flex: 0.5,
+         minWidth: 100,
+         headerName: 'Name',
+      },
+      {
+         field: 'email',
+         flex: 0.6,
+         minWidth: 100,
+         headerName: 'Email',
+      },
+      {
+         field: 'location',
+         flex: 0.5,
+         minWidth: 100,
+         headerName: 'Location',
+      },
+      {
+         field: 'phone',
+         flex: 0.5,
+         minWidth: 100,
+         headerName: 'Phone',
+      },
+   ];
+
+   const handleChangePage = (pageNo: number) => {
+      // dispatch(commonStore.actions.setTableState({ pageNo }));
+      // dispatch(bookingStore.sagaGetList());
+   };
+
+   const handleChangePerPage = (perPage: number) => {
+      // dispatch(commonStore.actions.setTableState({ perPage }));
+      // handleChangePage(1);
+   };
 
    return (
       <Stack spacing={3}>
@@ -159,16 +280,33 @@ export default function Page(): React.JSX.Element {
             </div>
          </Stack>
          <CustomersFilters />
-         <CustomersTable
-            count={paginatedCustomers.length}
-            page={page}
-            rows={paginatedCustomers}
-            rowsPerPage={rowsPerPage}
-         />
+         <Paper
+            elevation={1}
+            sx={{
+               marginTop: 2,
+               position: 'relative',
+               '& .highlight-cell': {
+                  backgroundColor: '#e7a800',
+               },
+            }}
+         >
+            <Grid container sx={{ height: `calc(100vh - ${heightComponentExcludingTable}px)` }}>
+               <AppDataTable
+                  columnHeaderHeight={90}
+                  rows={customers}
+                  columns={columns}
+                  getRowId={(params) => params.id}
+               />
+            </Grid>
+
+            <DataTablePagination
+               page={1}
+               perPage={100}
+               totalItems={1000}
+               onChangePage={handleChangePage}
+               onChangePerPage={handleChangePerPage}
+            />
+         </Paper>
       </Stack>
    );
-}
-
-function applyPagination(rows: Customer[], page: number, rowsPerPage: number): Customer[] {
-   return rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 }

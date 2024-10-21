@@ -1,18 +1,20 @@
-import { Tooltip, Typography, TooltipProps } from "@mui/material"
+'use client';
 
-import useStyles from "./styles"
+import { Tooltip, Typography, TooltipProps } from '@mui/material';
+
+import useStyles from './styles';
 
 function ErrorMessage({ title, children, ...props }: TooltipProps) {
-  const classes = useStyles()
-  return (
-    <Tooltip
-      {...props}
-      title={<Typography variant="body2">{title}</Typography>}
-      classes={{ ...classes }}
-    >
-      {children}
-    </Tooltip>
-  )
+   const classes = useStyles();
+   return (
+      <Tooltip
+         {...props}
+         title={<Typography variant="body2">{title}</Typography>}
+         classes={{ ...classes }}
+      >
+         {children}
+      </Tooltip>
+   );
 }
 
-export default ErrorMessage
+export default ErrorMessage;

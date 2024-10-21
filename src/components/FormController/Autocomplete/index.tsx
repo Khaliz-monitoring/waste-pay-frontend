@@ -1,72 +1,74 @@
-import { forwardRef } from "react"
-import { useController } from "react-hook-form"
+'use client';
 
-import _ from "lodash"
-import { makeStyles } from "@mui/styles"
-import { AppAutocomplete } from '@/components/App'
+import { forwardRef } from 'react';
+import { useController } from 'react-hook-form';
+
+import _ from 'lodash';
+import { makeStyles } from '@mui/styles';
+import AppAutocomplete from '@/components/Autocomplete';
 
 const useStyles = makeStyles(() => ({
-  popper: {
-    zIndex: 9999999,
-  },
-}))
+   popper: {
+      zIndex: 9999999,
+   },
+}));
 
 const FormControllerAutocomplete = forwardRef<any, any>((props, ref) => {
-  const classes = useStyles()
-  const {
-    control,
-    defaultValue,
-    name,
-    rules,
-    disabled,
-    primaryKeyOption,
-    onChange: onChangeProps,
-    textFieldProps,
-    multiple,
-    ...autocompleteProps
-  } = props
+   const classes = useStyles();
+   const {
+      control,
+      defaultValue,
+      name,
+      rules,
+      disabled,
+      primaryKeyOption,
+      onChange: onChangeProps,
+      textFieldProps,
+      multiple,
+      ...autocompleteProps
+   } = props;
 
-  const {
-    field: { onChange, ...inputProps },
-    fieldState: { invalid, error },
-  } = useController({
-    name,
-    rules,
-    defaultValue,
-    control,
-  })
+   const {
+      field: { onChange, ...inputProps },
+      fieldState: { invalid, error },
+   } = useController({
+      name,
+      rules,
+      defaultValue,
+      control,
+   });
 
-  const onChangeValue = (event, value) => {
-    if (_.isNil(value)) {
-      onChange(null)
-      return
-    }
-    onChange(value[primaryKeyOption])
+   const onChangeValue = (event, value) => {
+      if (_.isNil(value)) {
+         onChange(null);
+         return;
+      }
+      onChange(value[primaryKeyOption]);
 
-    if (_.isFunction(onChangeProps)) {
-      onChangeProps(value)
-    }
-  }
+      if (_.isFunction(onChangeProps)) {
+         onChangeProps(value);
+      }
+   };
 
-  return (
-    <AppAutocomplete
-      {...autocompleteProps}
-      {...inputProps}
-      ref={ref}
-      classes={{ ...classes }}
-      helperText={error?.message}
-      disabled={disabled}
-      error={Boolean(invalid)}
-      multiple={multiple}
-      onChange={onChangeValue}
-      textFieldProps={{ name: name, ...textFieldProps }}
-      primaryKeyOption={primaryKeyOption}
-    />
-  )
-})
+   return (
+      <AppAutocomplete
+         {...autocompleteProps}
+         {...inputProps}
+         ref={ref}
+         classes={{ ...classes }}
+         helperText={error?.message}
+         disabled={disabled}
+         error={Boolean(invalid)}
+         multiple={multiple}
+         onChange={onChangeValue}
+         textFieldProps={{ name: name, ...textFieldProps }}
+         primaryKeyOption={primaryKeyOption}
+      />
+   );
+});
 
 FormControllerAutocomplete.defaultProps = {
-  primaryKeyOption: "id",
-}
+   primaryKeyOption: 'id',
+};
 
-export default FormControllerAutocomplete
+export default FormControllerAutocomplete;
