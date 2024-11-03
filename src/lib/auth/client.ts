@@ -2,7 +2,7 @@ import authApi from '@/api/auth.api';
 import type { User } from '@/types/user';
 import axios from 'axios';
 import { redirect } from 'next/navigation';
-import { setCookie } from 'nookies';
+import nookies, { destroyCookie, parseCookies, setCookie } from 'nookies';
 
 function generateToken(): string {
    const arr = new Uint8Array(12);
@@ -53,7 +53,9 @@ class AuthClient {
       return { error: 'Social authentication not implemented' };
    }
 
-   async signInWithPassword(params: SignInWithPasswordParams): Promise<{ error?: string }> {
+   async signInWithPassword(
+      params: SignInWithPasswordParams
+   ): Promise<{ error?: string; accessToken?: string }> {
       const { email, password } = params;
 
       const transformData = {
@@ -71,39 +73,43 @@ class AuthClient {
             password: 'password',
          },
       };
-      axios
-         .post(`${process.env.NEXT_PUBLIC_BACKEND_URL}oauth/login`, transformData, options)
-         .then((response) => {
-            const accessToken = response.data.data.accessToken;
-            const refreshToken = response.data.data.refreshToken;
-            const name = response.data.data.name;
-            const role = response.data.data.role;
-            const defaultLocale = response.data.data.defaultLocale;
-            const userId = response.data.data.id;
 
-            setCookie(null, 'access_token', accessToken, {
-               maxAge: 604800,
-               path: '/',
-            });
-            // save refresh_token in cookies
-            setCookie(null, 'refresh_token', refreshToken, {
-               maxAge: 604800,
-               path: '/',
-            });
+      const res = await axios.post(
+         `${process.env.NEXT_PUBLIC_BACKEND_URL}oauth/login`,
+         transformData,
+         options
+      );
 
-            setCookie(null, 'role', role, { maxAge: 604800, path: '/' });
-            setCookie(null, 'name', name, { maxAge: 604800, path: '/' });
-            localStorage.setItem('name', name);
-            setCookie(null, 'defaultLocale', defaultLocale, { maxAge: 604800, path: '/' });
-            setCookie(null, 'id', userId, { maxAge: 604800, path: '/' });
+      const data = res?.data.data;
 
-            return {};
-         })
-         .catch((error) => {
-            console.log(error);
-         });
+      const accessToken = data.accessToken;
+      const refreshToken = data.refreshToken;
+      const name = data.name;
+      const role = data.role;
+      const defaultLocale = data.defaultLocale;
+      const userId = data.id;
 
-      return {};
+      setCookie(null, 'access_token', accessToken, {
+         maxAge: 604800,
+         path: '/',
+      });
+
+      // save refresh_token in cookies
+      setCookie(null, 'refresh_token', refreshToken, {
+         maxAge: 604800,
+         path: '/',
+      });
+
+      setCookie(null, 'role', role, { maxAge: 604800, path: '/' });
+      setCookie(null, 'name', name, { maxAge: 604800, path: '/' });
+      localStorage.setItem('name', name);
+      setCookie(null, 'defaultLocale', defaultLocale, { maxAge: 604800, path: '/' });
+      setCookie(null, 'id', userId, { maxAge: 604800, path: '/' });
+
+      const cookies = parseCookies();
+      const access = cookies['access_token'];
+
+      return { accessToken };
    }
 
    async resetPassword(data: ResetPasswordParams): Promise<{ error?: string }> {
@@ -117,9 +123,8 @@ class AuthClient {
 
    async getUser(): Promise<{ data?: User | null; error?: string }> {
       try {
-         const token = localStorage.getItem('access_token');
-
          const { data } = await authApi.checkToken();
+
          const userInfo: User = {
             id: data.id,
             avatar: data.avatar,
@@ -135,10 +140,18 @@ class AuthClient {
    }
 
    async signOut(): Promise<{ error?: string }> {
-      localStorage.removeItem('custom-auth-token');
+      // localStorage.removeItem('custom-auth-token');
+      removeAllCookies();
 
       return {};
    }
 }
+
+const removeAllCookies = () => {
+   const cookies = nookies.get();
+   Object.keys(cookies).forEach((cookieName) => {
+      nookies.destroy(null, cookieName, { path: '/' });
+   });
+};
 
 export const authClient = new AuthClient();

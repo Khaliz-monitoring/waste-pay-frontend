@@ -1,0 +1,37 @@
+/* @import "/node_modules/codemirror/theme/material.css";
+@import "/node_modules/codemirror/theme/material.css";
+
+.CodeMirror {
+  height: 100%;
+  /* margin-top: '1rem'; */
+/* }  */
+.MuiDataGrid-main div:last-child {
+   visibility: block;
+   background-color: 'black';
+}
+.center-element {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.space-between-element {
+   display: flex;
+   justify-content: space-between;
+}
+p {
+   border: none !important;
+   margin-block-start: 0;
+   margin-block-end: 0;
+   margin-inline-start: 0;
+   margin-inline-end: 0;
+   padding-block-start: 0;
+   padding-block-end: 0;
+   padding-inline-start: 0;
+   padding-inline-end: 0;
+}
+.highlight-row {
+   pointer-events: none;
+   font-weight: 600;
+   background-color: #fff0c8 !important;
+}

@@ -51,23 +51,24 @@ export function SignInForm(): React.JSX.Element {
       async (values: Values): Promise<void> => {
          setIsPending(true);
 
-         const { error } = await authClient.signInWithPassword({
+         const { error, accessToken } = await authClient.signInWithPassword({
             email: values.email,
             password: values.password,
          });
 
          if (error) {
+            console.log('check token error');
             setError('root', { type: 'server', message: error });
             setIsPending(false);
             return;
          }
 
          // Refresh the auth state
-         await checkSession?.();
+         await checkSession();
 
          // UserProvider, for this case, will not refresh the router
          // After refresh, GuestGuard will handle the redirect
-         router.refresh();
+         router.push('/dashboard');
       },
       [checkSession, router, setError]
    );

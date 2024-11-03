@@ -1,4 +1,3 @@
-'use-client';
 import axios from 'axios';
 import type { AxiosError, AxiosInstance, ResponseType } from 'axios';
 import type { GetServerSidePropsContext } from 'next';
@@ -103,18 +102,14 @@ class HttpService<GetList = any> {
    protected saveToken = (context: GetServerSidePropsContext = null as any) => {
       const cookies = parseCookies(context);
       const accessToken = cookies['access_token'];
+
       const locale = cookies['defaultLocale'] || 'en';
-      // Set token if had
-      if (accessToken) {
-         this.instance.defaults.headers.common = {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-            locale: locale,
-         };
-      } else {
-         delete this.instance.defaults.headers.Authorization;
-         this.instance.defaults.headers.common.locale = locale;
-      }
+
+      this.instance.defaults.headers.common = {
+         Authorization: `Bearer ${accessToken}`,
+         'Content-Type': 'application/json',
+         locale: locale,
+      };
    };
 
    protected setHeaderForApiTransferFile = (context: GetServerSidePropsContext = null as any) => {

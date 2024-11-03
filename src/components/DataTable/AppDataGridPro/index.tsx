@@ -15,7 +15,10 @@ export interface DataTableProps extends DataGridProProps {
    dataFilter?: any;
    currency?: string;
    onCellClick?: () => void;
-   getRowId?: () => any;
+   getRowId?: (params: any) => any;
+}
+export function addGridRowId(rowData, getRowId) {
+   return getRowId == null ? rowData : { ...rowData, id: getRowId(rowData) };
 }
 
 const AppDataTable: React.FC<any> = (props) => {
@@ -35,8 +38,10 @@ const AppDataTable: React.FC<any> = (props) => {
       dataFilter,
       onCellClick,
       getRowId,
+      rows,
       ...rest
    } = props;
+   const rowsWithId = rows.map((row) => addGridRowId(row, getRowId));
 
    return (
       <DataGridPro
@@ -45,13 +50,19 @@ const AppDataTable: React.FC<any> = (props) => {
          sx={{
             '& .MuiDataGrid-columnHeaderTitle': {
                whiteSpace: 'break-spaces',
-               lineHeight: 1.2,
+               lineHeight: 1,
+            },
+            '& .MuiDataGrid-cell': {
+               '&:focus': {
+                  backgroundColor: 'transparent !important', // Xóa nền khi cell được focus
+                  outline: 'none', // Xóa outline
+               },
             },
          }}
-         columnHeaderHeight={90}
-         rowHeight={30}
+         columnHeaderHeight={60}
+         rowHeight={60}
          rowBufferPx={35}
-         getRowId={getRowId}
+         rows={rowsWithId}
          onCellClick={onCellClick}
          {...rest}
       />
