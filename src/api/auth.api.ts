@@ -12,8 +12,8 @@ class AuthApi extends HttpService {
       return this.post<any>('/oauth/revokeAccessToken', {});
    };
 
-   checkToken = () => {
-      return this.post<any>('/oauth/checkToken');
+   retrieveAuthenticatedUserInfo = () => {
+      return this.get<any>('/auth/retrieve-authenticated-user-info');
    };
 }
 

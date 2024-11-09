@@ -75,15 +75,15 @@ class AuthClient {
       };
 
       const res = await axios.post(
-         `${process.env.NEXT_PUBLIC_BACKEND_URL}oauth/login`,
+         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/authenticate`,
          transformData,
          options
       );
 
-      const data = res?.data.data;
+      const data = res?.data;
 
-      const accessToken = data.accessToken;
-      const refreshToken = data.refreshToken;
+      const accessToken = data.access_token;
+      const refreshToken = data.refresh_token;
       const name = data.name;
       const role = data.role;
       const defaultLocale = data.defaultLocale;
@@ -123,7 +123,7 @@ class AuthClient {
 
    async getUser(): Promise<{ data?: User | null; error?: string }> {
       try {
-         const { data } = await authApi.checkToken();
+         const { data } = await authApi.retrieveAuthenticatedUserInfo();
 
          const userInfo: User = {
             id: data.id,
