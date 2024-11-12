@@ -7,6 +7,8 @@ import { logger } from '@/lib/default-logger';
 import { useRouter } from 'next/navigation'; // Correct for App Router
 import { LOGIN } from '@/paths/frontend';
 import { usePathname } from 'next/navigation';
+import { useAppDispatch } from '@/store/hooks';
+import { authStore } from '@/store/slices';
 
 export interface UserContextValue {
    user: User | null;
@@ -38,9 +40,9 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
    const checkSession = React.useCallback(async (): Promise<void> => {
       try {
          const { data, error } = await authClient.getUser();
+         const dispatch = useAppDispatch();
 
          if (error && !pathname.includes(LOGIN)) {
-            console.log('Redirecting to login...');
             router.push(LOGIN); // Client-side navigation with App Router's API
          }
 
@@ -55,12 +57,7 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
             return;
          }
 
-         setState((prev) => ({
-            ...prev,
-            user: data ?? null,
-            error: null,
-            isLoading: false,
-         }));
+         dispatch(authStore.actions.setCurrentUser(data));
       } catch (err) {
          logger.error(err);
          setState((prev) => ({

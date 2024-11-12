@@ -1,4 +1,5 @@
 import authApi from '@/api/auth.api';
+import { UserInfo } from '@/store/slices/auth.reducer';
 import type { User } from '@/types/user';
 import axios from 'axios';
 import { redirect } from 'next/navigation';
@@ -121,16 +122,17 @@ class AuthClient {
       return { error: 'Update reset not implemented' };
    }
 
-   async getUser(): Promise<{ data?: User | null; error?: string }> {
+   async getUser(): Promise<{ data?: UserInfo | null; error?: string }> {
       try {
          const { data } = await authApi.retrieveAuthenticatedUserInfo();
 
-         const userInfo: User = {
-            id: data.id,
+         const userInfo: UserInfo = {
+            name: data.name,
+            phone: data.phone,
             avatar: data.avatar,
-            firstName: data.firstName,
-            lastName: data.lastName,
-            email: data.email,
+            address: data.address,
+            role: data.role,
+            accessToken: data.access_token,
          };
          return { data: userInfo };
       } catch (error) {

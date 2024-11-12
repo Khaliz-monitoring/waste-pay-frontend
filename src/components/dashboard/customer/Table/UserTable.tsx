@@ -1,7 +1,7 @@
 'use client';
 
 import AppDataTable from '@/components/DataTable/AppDataGridPro';
-import { Grid } from '@mui/material';
+import { Avatar, Box, Grid } from '@mui/material';
 import type { Customer } from '@/components/dashboard/customer/customers-table';
 import dayjs from 'dayjs';
 import { DataTablePagination } from '@/components/DataTable';
@@ -130,11 +130,40 @@ const customers = [
    },
 ] satisfies Customer[];
 
+function stringToColor(string: string) {
+   let hash = 0;
+   let i;
+
+   /* eslint-disable no-bitwise */
+   for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+   }
+
+   let color = '#';
+
+   for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+   }
+   /* eslint-enable no-bitwise */
+
+   return color;
+}
+
 export default function UserTable(): React.JSX.Element {
    const page = 0;
    const rowsPerPage = 5;
 
    const heightComponentExcludingTable = 0;
+
+   function stringAvatar(name: string) {
+      return {
+         sx: {
+            bgcolor: stringToColor(name),
+         },
+         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
+      };
+   }
 
    const columns = [
       {
@@ -143,7 +172,12 @@ export default function UserTable(): React.JSX.Element {
          minWidth: 100,
          headerName: 'Name',
          renderCell(params) {
-            return <span>{params.row.name}</span>;
+            return (
+               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  <Avatar {...stringAvatar(params.row.name)}>H</Avatar>
+                  <span style={{ fontWeight: 500 }}>{params.row.name}</span>
+               </Box>
+            );
          },
       },
       {
