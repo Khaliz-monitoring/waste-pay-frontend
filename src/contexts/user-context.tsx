@@ -1,17 +1,14 @@
 'use client';
 
-import * as React from 'react';
-import type { User } from '@/types/user';
 import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/default-logger';
-import { useRouter } from 'next/navigation'; // Correct for App Router
 import { LOGIN } from '@/paths/frontend';
-import { usePathname } from 'next/navigation';
-import { useAppDispatch } from '@/store/hooks';
-import { authStore } from '@/store/slices';
+import { UserAuth } from '@/store/slices/auth.reducer';
+import { usePathname, useRouter } from 'next/navigation'; // Correct for App Router
+import * as React from 'react';
 
 export interface UserContextValue {
-   user: User | null;
+   user: UserAuth | null;
    error: string | null;
    isLoading: boolean;
    checkSession?: () => Promise<void>;
@@ -25,7 +22,7 @@ export interface UserProviderProps {
 
 export function UserProvider({ children }: UserProviderProps): React.JSX.Element {
    const [state, setState] = React.useState<{
-      user: User | null;
+      user: UserAuth | null;
       error: string | null;
       isLoading: boolean;
    }>({
@@ -40,7 +37,8 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
    const checkSession = React.useCallback(async (): Promise<void> => {
       try {
          const { data, error } = await authClient.getUser();
-         const dispatch = useAppDispatch();
+
+         console.log(error);
 
          if (error && !pathname.includes(LOGIN)) {
             router.push(LOGIN); // Client-side navigation with App Router's API
@@ -57,7 +55,9 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
             return;
          }
 
-         dispatch(authStore.actions.setCurrentUser(data));
+         setState((prev) => ({ ...prev, user: data ?? null, error: null, isLoading: false }));
+
+         // dispatch(authStore.actions.setCurrentUser(data));
       } catch (err) {
          logger.error(err);
          setState((prev) => ({

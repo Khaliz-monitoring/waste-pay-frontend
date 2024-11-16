@@ -1,6 +1,6 @@
 import authApi from '@/api/auth.api';
-import { UserInfo } from '@/store/slices/auth.reducer';
-import type { User } from '@/types/user';
+import { UserAuth } from '@/store/slices/auth.reducer';
+
 import axios from 'axios';
 import { redirect } from 'next/navigation';
 import nookies, { destroyCookie, parseCookies, setCookie } from 'nookies';
@@ -12,12 +12,11 @@ function generateToken(): string {
 }
 
 const user = {
-   id: 'USR-000',
+   id: 1,
    avatar: '/assets/avatar.png',
-   firstName: 'Sofia',
-   lastName: 'Rivers',
+   name: 'Sofia Rivers',
    email: 'sofia@devias.io',
-} satisfies User;
+} as UserAuth;
 
 export interface SignUpParams {
    firstName: string;
@@ -122,20 +121,22 @@ class AuthClient {
       return { error: 'Update reset not implemented' };
    }
 
-   async getUser(): Promise<{ data?: UserInfo | null; error?: string }> {
+   async getUser(): Promise<{ data?: UserAuth | null; error?: string }> {
       try {
          const { data } = await authApi.retrieveAuthenticatedUserInfo();
 
-         const userInfo: UserInfo = {
+         const userInfo = {
             name: data.name,
             phone: data.phone,
             avatar: data.avatar,
             address: data.address,
             role: data.role,
             accessToken: data.access_token,
-         };
+         } as UserAuth;
+
          return { data: userInfo };
       } catch (error) {
+         console.log(error);
          //return { error: 'Failed to authenticate user' };
          return { data: null };
       }

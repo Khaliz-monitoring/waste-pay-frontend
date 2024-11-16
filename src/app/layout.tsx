@@ -1,12 +1,12 @@
-import * as React from 'react';
 import type { Viewport } from 'next';
+import * as React from 'react';
 
 import '@/styles/global.css';
 import '@/theme/_global.css';
 
-import { UserProvider } from '@/contexts/user-context';
 import { LocalizationProvider } from '@/components/core/localization-provider';
 import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
+import { UserProvider } from '@/contexts/user-context';
 import StoreProvider from '@/store/StoreProvider';
 
 export const viewport = { width: 'device-width', initialScale: 1 } satisfies Viewport;

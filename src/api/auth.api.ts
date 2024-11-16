@@ -17,6 +17,6 @@ class AuthApi extends HttpService {
    };
 }
 
-const authApi = new AuthApi('');
+const authApi = new AuthApi('Authentication');
 
 export default authApi;

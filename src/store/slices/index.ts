@@ -1,3 +1,2 @@
-export * as userStore from './user.reducer';
+export * as manageUserStore from './manage-user.reducer';
 export * as commonStore from './common.reducer';
-export * as authStore from './auth.reducer';

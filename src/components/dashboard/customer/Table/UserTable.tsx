@@ -5,6 +5,10 @@ import { Avatar, Box, Grid } from '@mui/material';
 import type { Customer } from '@/components/dashboard/customer/customers-table';
 import dayjs from 'dayjs';
 import { DataTablePagination } from '@/components/DataTable';
+import { useAppDispatch } from '@/store/hooks';
+import { EntityType } from '@/types/mange-user';
+import { manageUserStore } from '@/store/slices';
+import { useLayoutEffect } from 'react';
 
 const customers = [
    {
@@ -89,7 +93,7 @@ const customers = [
 
    {
       id: 'USR-004',
-      name: 'Penjani Inyene',
+      name: 'Penjani UserTableInyene',
       avatar: '/assets/avatar-4.png',
       email: 'penjani.inyene@devias.io',
       phone: '858-602-3409',
@@ -150,9 +154,17 @@ function stringToColor(string: string) {
    return color;
 }
 
-export default function UserTable(): React.JSX.Element {
-   const page = 0;
-   const rowsPerPage = 5;
+interface UserTableProps {
+   entityType: EntityType;
+}
+
+const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
+   const dispatch = useAppDispatch();
+
+   // fetch data table
+   useLayoutEffect(() => {
+      dispatch(manageUserStore.firstFetch(entityType));
+   }, []);
 
    const heightComponentExcludingTable = 0;
 
@@ -230,4 +242,6 @@ export default function UserTable(): React.JSX.Element {
          /> */}
       </Grid>
    );
-}
+};
+
+export default UserTable;

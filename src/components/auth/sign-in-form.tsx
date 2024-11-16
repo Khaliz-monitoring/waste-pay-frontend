@@ -45,7 +45,7 @@ export function SignInForm(): React.JSX.Element {
       handleSubmit,
       setError,
       formState: { errors },
-   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
+   } = useForm<Values>({ defaultValues: null, resolver: zodResolver(schema) });
 
    const onSubmit = React.useCallback(
       async (values: Values): Promise<void> => {
