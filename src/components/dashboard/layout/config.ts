@@ -5,17 +5,18 @@ export const navItems = [
    { key: 'overview', title: 'Thống Kê', href: paths.dashboard.overview, icon: 'chart-pie' },
    { key: 'customers', title: 'Hộ Gia Đình', href: paths.dashboard.customers, icon: 'users' },
    {
-      key: 'district-managers',
-      title: 'Quản Lý Cấp Huyện',
-      href: paths.dashboard.districtManagers,
-      icon: 'users',
-   },
-   {
       key: 'commune-managers',
       title: 'Quản Lý Cấp Xã',
       href: paths.dashboard.communeManagers,
       icon: 'users',
    },
+   {
+      key: 'district-managers',
+      title: 'Quản Lý Cấp Huyện',
+      href: paths.dashboard.districtManagers,
+      icon: 'users',
+   },
+
    { key: 'settings', title: 'Cài Đặt', href: paths.dashboard.settings, icon: 'gear-six' },
    { key: 'account', title: 'Tài Khoản', href: paths.dashboard.account, icon: 'user' },
 ] satisfies NavItemConfig[];

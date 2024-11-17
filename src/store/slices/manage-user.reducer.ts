@@ -2,6 +2,7 @@ import { createAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../config';
 import {
+   AddUserProps,
    EntityType,
    ManageUserReducer,
    SetLoadingTableProps,
@@ -58,7 +59,8 @@ export const selectTableData = (entityType: EntityType) =>
 
 /* =============== Actions ================ */
 
-export const firstFetch = createAction<EntityType>(`${name}/FIRST_FETCH`);
+export const firstFetchAction = createAction<EntityType>(`${name}/FIRST_FETCH`);
+export const addUserAction = createAction<AddUserProps>(`${name}/ADD_USER`);
 
 export const actions = userSilce.actions;
 

@@ -1,9 +1,14 @@
 import { API_VERSION_V1 } from '@/constants/api-version';
 import HttpService from '@/helper/HttpService';
+import { AddUserProps } from '@/types/mange-user';
 
 class ManageUserApi extends HttpService {
    getListUserByFilter = (filter: any) => {
       return this.get<any>(`management/get-users-by-manager`, filter);
+   };
+
+   addUser = (data: AddUserProps) => {
+      return this.get<any>(`management/add-user`, data);
    };
 }
 

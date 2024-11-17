@@ -163,10 +163,8 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
 
    // fetch data table
    useLayoutEffect(() => {
-      dispatch(manageUserStore.firstFetch(entityType));
+      dispatch(manageUserStore.firstFetchAction(entityType));
    }, []);
-
-   const heightComponentExcludingTable = 0;
 
    function stringAvatar(name: string) {
       return {
@@ -229,7 +227,7 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
    };
 
    return (
-      <Grid container sx={{ height: `calc(100vh - ${heightComponentExcludingTable}px)` }}>
+      <Grid container sx={{ height: `calc(100vh - 240px)` }}>
          <AppDataTable rows={customers} columns={columns} />
          {/* <DataTablePagination
             page={1}

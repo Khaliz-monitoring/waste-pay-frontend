@@ -3,7 +3,7 @@
 import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/default-logger';
 import { LOGIN } from '@/paths/frontend';
-import { UserAuth } from '@/store/slices/auth.reducer';
+import { UserAuth } from '@/types/auth';
 import { usePathname, useRouter } from 'next/navigation'; // Correct for App Router
 import * as React from 'react';
 
@@ -37,8 +37,6 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
    const checkSession = React.useCallback(async (): Promise<void> => {
       try {
          const { data, error } = await authClient.getUser();
-
-         console.log(error);
 
          if (error && !pathname.includes(LOGIN)) {
             router.push(LOGIN); // Client-side navigation with App Router's API

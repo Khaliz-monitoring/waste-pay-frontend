@@ -1,5 +1,5 @@
 import authApi from '@/api/auth.api';
-import { UserAuth } from '@/store/slices/auth.reducer';
+import { UserAuth } from '@/types/auth';
 
 import axios from 'axios';
 import { redirect } from 'next/navigation';
@@ -11,12 +11,12 @@ function generateToken(): string {
    return Array.from(arr, (v) => v.toString(16).padStart(2, '0')).join('');
 }
 
-const user = {
-   id: 1,
-   avatar: '/assets/avatar.png',
-   name: 'Sofia Rivers',
-   email: 'sofia@devias.io',
-} as UserAuth;
+// const user = {
+//    id: 1,
+//    avatar: '/assets/avatar.png',
+//    name: 'Sofia Rivers',
+//    email: 'sofia@devias.io',
+// } as UserAuth;
 
 export interface SignUpParams {
    firstName: string;
@@ -73,43 +73,47 @@ class AuthClient {
             password: 'password',
          },
       };
+      try {
+         const res = await axios.post(
+            `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/authenticate`,
+            transformData,
+            options
+         );
 
-      const res = await axios.post(
-         `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/authenticate`,
-         transformData,
-         options
-      );
+         const data = res?.data;
 
-      const data = res?.data;
+         const accessToken = data.access_token;
+         const refreshToken = data.refresh_token;
+         const name = data.name;
+         const role = data.role;
+         const defaultLocale = data.defaultLocale;
+         const userId = data.id;
 
-      const accessToken = data.access_token;
-      const refreshToken = data.refresh_token;
-      const name = data.name;
-      const role = data.role;
-      const defaultLocale = data.defaultLocale;
-      const userId = data.id;
+         setCookie(null, 'access_token', accessToken, {
+            maxAge: 604800,
+            path: '/',
+         });
 
-      setCookie(null, 'access_token', accessToken, {
-         maxAge: 604800,
-         path: '/',
-      });
+         // save refresh_token in cookies
+         setCookie(null, 'refresh_token', refreshToken, {
+            maxAge: 604800,
+            path: '/',
+         });
 
-      // save refresh_token in cookies
-      setCookie(null, 'refresh_token', refreshToken, {
-         maxAge: 604800,
-         path: '/',
-      });
+         setCookie(null, 'role', role, { maxAge: 604800, path: '/' });
+         setCookie(null, 'name', name, { maxAge: 604800, path: '/' });
+         localStorage.setItem('name', name);
+         setCookie(null, 'defaultLocale', defaultLocale, { maxAge: 604800, path: '/' });
+         setCookie(null, 'id', userId, { maxAge: 604800, path: '/' });
 
-      setCookie(null, 'role', role, { maxAge: 604800, path: '/' });
-      setCookie(null, 'name', name, { maxAge: 604800, path: '/' });
-      localStorage.setItem('name', name);
-      setCookie(null, 'defaultLocale', defaultLocale, { maxAge: 604800, path: '/' });
-      setCookie(null, 'id', userId, { maxAge: 604800, path: '/' });
+         const cookies = parseCookies();
+         const access = cookies['access_token'];
 
-      const cookies = parseCookies();
-      const access = cookies['access_token'];
-
-      return { accessToken };
+         return { accessToken };
+      } catch (error) {
+         console.log(error);
+         return { error: 'Username or password is incorrect' };
+      }
    }
 
    async resetPassword(data: ResetPasswordParams): Promise<{ error?: string }> {
@@ -126,12 +130,12 @@ class AuthClient {
          const { data } = await authApi.retrieveAuthenticatedUserInfo();
 
          const userInfo = {
-            name: data.name,
+            firstName: data.firstName,
+            lastName: data.lastName,
             phone: data.phone,
             avatar: data.avatar,
             address: data.address,
             role: data.role,
-            accessToken: data.access_token,
          } as UserAuth;
 
          return { data: userInfo };

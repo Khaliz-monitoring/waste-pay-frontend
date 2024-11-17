@@ -55,3 +55,12 @@ export type SetLoadingTableProps = {
    // the loading state
    isLoading: boolean;
 };
+
+// Represent the action of adding new user for a specified entity type's table
+export type AddUserProps = {
+   // the type of entity for which we're inserting for a specified entity type's table
+   entityType: EntityType;
+
+   // email of user you want to add into table
+   email: string;
+};
