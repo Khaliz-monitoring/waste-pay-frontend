@@ -9,6 +9,7 @@ import { useAppDispatch } from '@/store/hooks';
 import { EntityType } from '@/types/mange-user';
 import { manageUserStore } from '@/store/slices';
 import { useLayoutEffect } from 'react';
+import { stringAvatar } from '@/utils/string-avatar';
 
 const customers = [
    {
@@ -166,15 +167,6 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
       dispatch(manageUserStore.firstFetchAction(entityType));
    }, []);
 
-   function stringAvatar(name: string) {
-      return {
-         sx: {
-            bgcolor: stringToColor(name),
-         },
-         children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
-      };
-   }
-
    const columns = [
       {
          field: 'name',
@@ -184,7 +176,7 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
          renderCell(params) {
             return (
                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Avatar {...stringAvatar(params.row.name)}>H</Avatar>
+                  <Avatar {...stringAvatar(params.row.name)} />
                   <span style={{ fontWeight: 500 }}>{params.row.name}</span>
                </Box>
             );
