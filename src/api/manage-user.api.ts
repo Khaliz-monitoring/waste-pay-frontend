@@ -1,4 +1,3 @@
-import { API_VERSION_V1 } from '@/constants/api-version';
 import HttpService from '@/helper/HttpService';
 import { AddUserProps } from '@/types/mange-user';
 

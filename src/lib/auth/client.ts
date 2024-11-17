@@ -130,17 +130,17 @@ class AuthClient {
          const { data } = await authApi.retrieveAuthenticatedUserInfo();
 
          const userInfo = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            phone: data.phone,
+            firstName: data.firstname,
+            lastName: data.lastname,
+            phone: data.phoneNumber,
             avatar: data.avatar,
             address: data.address,
             role: data.role,
+            email: data.email,
          } as UserAuth;
 
          return { data: userInfo };
       } catch (error) {
-         console.log(error);
          //return { error: 'Failed to authenticate user' };
          return { data: null };
       }

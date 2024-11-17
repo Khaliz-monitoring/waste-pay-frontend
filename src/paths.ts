@@ -13,6 +13,7 @@ export const paths = {
       districtManagers: '/dashboard/district-managers',
       integrations: '/dashboard/integrations',
       settings: '/dashboard/settings',
+      payment: '/dashboard/payment',
    },
    errors: { notFound: '/errors/not-found' },
 } as const;

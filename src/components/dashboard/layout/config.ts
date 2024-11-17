@@ -16,7 +16,8 @@ export const navItems = [
       href: paths.dashboard.districtManagers,
       icon: 'users',
    },
+   { key: 'account', title: 'Tài Khoản', href: paths.dashboard.account, icon: 'user' },
+   { key: 'payment', title: 'Thanh Toán', href: paths.dashboard.payment, icon: 'payment' },
 
    { key: 'settings', title: 'Cài Đặt', href: paths.dashboard.settings, icon: 'gear-six' },
-   { key: 'account', title: 'Tài Khoản', href: paths.dashboard.account, icon: 'user' },
 ] satisfies NavItemConfig[];

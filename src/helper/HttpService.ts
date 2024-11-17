@@ -20,7 +20,7 @@ class HttpService<GetList = any> {
    }
 
    private handleSuccessRes({ data, status }): any {
-      return { data, status };
+      return { data: JSON.parse(data), status };
    }
 
    private async handleErrorRes(error: AxiosError) {
