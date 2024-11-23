@@ -4,7 +4,6 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
@@ -14,11 +13,20 @@ import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { paths } from '@/paths';
 import type { NavItemConfig } from '@/types/nav';
 
-import { navItems } from './config';
+import { ERole } from '@/enums/role.enum';
+import { useUser } from '@/hooks/use-user';
+import { useAppDispatch } from '@/store/hooks';
+import { navbarStore } from '@/store/slices';
+import { useSelector } from 'react-redux';
 import { navIcons } from './nav-icons';
+import WorkspaceOptions from './workspace-options';
 
 export function SideNav(): React.JSX.Element {
    const pathname = usePathname();
+   const dispatch = useAppDispatch();
+   const { user } = useUser();
+
+   const navItems = useSelector(navbarStore.selectNavbarMenuItems);
 
    return (
       <Box
@@ -52,27 +60,7 @@ export function SideNav(): React.JSX.Element {
             <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                <Logo color="light" height={32} width={122} />
             </Box>
-            <Box
-               sx={{
-                  alignItems: 'center',
-                  backgroundColor: 'var(--mui-palette-neutral-950)',
-                  border: '1px solid var(--mui-palette-neutral-700)',
-                  borderRadius: '12px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  p: '4px 12px',
-               }}
-            >
-               <Box sx={{ flex: '1 1 auto' }}>
-                  <Typography color="var(--mui-palette-neutral-400)" variant="body2">
-                     Workspace
-                  </Typography>
-                  <Typography color="inherit" variant="subtitle1">
-                     Devias
-                  </Typography>
-               </Box>
-               <CaretUpDownIcon />
-            </Box>
+            {user?.role !== ERole.USER && <WorkspaceOptions />}
          </Stack>
          <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
          <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>

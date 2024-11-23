@@ -1,7 +1,7 @@
 import type { NavItemConfig } from '@/types/nav';
 import { paths } from '@/paths';
 
-export const navItems = [
+export const mangerNavItems = [
    { key: 'overview', title: 'Thống Kê', href: paths.dashboard.overview, icon: 'chart-pie' },
    { key: 'customers', title: 'Hộ Gia Đình', href: paths.dashboard.customers, icon: 'users' },
    {
@@ -16,6 +16,12 @@ export const navItems = [
       href: paths.dashboard.districtManagers,
       icon: 'users',
    },
+   { key: 'account', title: 'Tài Khoản', href: paths.dashboard.account, icon: 'user' },
+
+   { key: 'settings', title: 'Cài Đặt', href: paths.dashboard.settings, icon: 'gear-six' },
+] satisfies NavItemConfig[];
+
+export const userNavItems = [
    { key: 'account', title: 'Tài Khoản', href: paths.dashboard.account, icon: 'user' },
    { key: 'payment', title: 'Thanh Toán', href: paths.dashboard.payment, icon: 'payment' },
 

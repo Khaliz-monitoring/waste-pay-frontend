@@ -13,6 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import Grid from '@mui/material/Unstable_Grid2';
+import { useUser } from '@/hooks/use-user';
 
 const states = [
    { value: 'alabama', label: 'Alabama' },
@@ -22,6 +23,8 @@ const states = [
 ] as const;
 
 export function AccountDetailsForm(): React.JSX.Element {
+   const { user } = useUser();
+
    return (
       <form
          onSubmit={(event) => {
@@ -36,29 +39,30 @@ export function AccountDetailsForm(): React.JSX.Element {
                   <Grid md={6} xs={12}>
                      <FormControl fullWidth required>
                         <InputLabel>Họ</InputLabel>
-                        <OutlinedInput defaultValue="Sofia" label="First name" name="firstName" />
+                        <OutlinedInput value={user.firstName} label="First name" name="firstName" />
                      </FormControl>
                   </Grid>
                   <Grid md={6} xs={12}>
                      <FormControl fullWidth required>
                         <InputLabel>Tên</InputLabel>
-                        <OutlinedInput defaultValue="Rivers" label="Last name" name="lastName" />
+                        <OutlinedInput value={user.lastName} label="Last name" name="lastName" />
                      </FormControl>
                   </Grid>
                   <Grid md={6} xs={12}>
                      <FormControl fullWidth required>
                         <InputLabel>Email address</InputLabel>
-                        <OutlinedInput
-                           defaultValue="sofia@devias.io"
-                           label="Email address"
-                           name="email"
-                        />
+                        <OutlinedInput value={user.email} label="Email address" name="email" />
                      </FormControl>
                   </Grid>
                   <Grid md={6} xs={12}>
                      <FormControl fullWidth>
                         <InputLabel>Phone number</InputLabel>
-                        <OutlinedInput label="Phone number" name="phone" type="tel" />
+                        <OutlinedInput
+                           label="Phone number"
+                           name="phone"
+                           type="tel"
+                           value={user.phone}
+                        />
                      </FormControl>
                   </Grid>
                   <Grid md={6} xs={12}>

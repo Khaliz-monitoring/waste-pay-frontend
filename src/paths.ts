@@ -1,3 +1,5 @@
+import { BASE_URL } from './paths/frontend';
+
 export const paths = {
    home: '/',
    auth: {
@@ -6,14 +8,14 @@ export const paths = {
       resetPassword: '/auth/reset-password',
    },
    dashboard: {
-      overview: '/dashboard',
-      account: '/dashboard/account',
-      customers: '/dashboard/customers',
-      communeManagers: '/dashboard/commune-managers',
-      districtManagers: '/dashboard/district-managers',
-      integrations: '/dashboard/integrations',
-      settings: '/dashboard/settings',
-      payment: '/dashboard/payment',
+      overview: `${BASE_URL}/dashboard`,
+      account: `${BASE_URL}/dashboard/account`,
+      customers: `${BASE_URL}/dashboard/customers`,
+      communeManagers: `${BASE_URL}/dashboard/commune-managers`,
+      districtManagers: `${BASE_URL}/dashboard/district-managers`,
+      integrations: `${BASE_URL}/dashboard/integrations`,
+      settings: `${BASE_URL}/dashboard/settings`,
+      payment: `${BASE_URL}/dashboard/payment`,
    },
    errors: { notFound: '/errors/not-found' },
 } as const;

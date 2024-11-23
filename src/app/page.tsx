@@ -1,5 +1,6 @@
+import { paths } from '@/paths';
 import { redirect } from 'next/navigation';
 
 export default function Page(): never {
-  redirect('/dashboard');
+   redirect(paths.dashboard.account);
 }

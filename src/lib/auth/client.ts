@@ -1,22 +1,15 @@
 import authApi from '@/api/auth.api';
+import { extrackERole } from '@/enums/role.enum';
 import { UserAuth } from '@/types/auth';
 
 import axios from 'axios';
-import { redirect } from 'next/navigation';
-import nookies, { destroyCookie, parseCookies, setCookie } from 'nookies';
+import nookies, { setCookie } from 'nookies';
 
 function generateToken(): string {
    const arr = new Uint8Array(12);
    window.crypto.getRandomValues(arr);
    return Array.from(arr, (v) => v.toString(16).padStart(2, '0')).join('');
 }
-
-// const user = {
-//    id: 1,
-//    avatar: '/assets/avatar.png',
-//    name: 'Sofia Rivers',
-//    email: 'sofia@devias.io',
-// } as UserAuth;
 
 export interface SignUpParams {
    firstName: string;
@@ -83,31 +76,28 @@ class AuthClient {
          const data = res?.data;
 
          const accessToken = data.access_token;
-         const refreshToken = data.refresh_token;
-         const name = data.name;
-         const role = data.role;
-         const defaultLocale = data.defaultLocale;
-         const userId = data.id;
+         // const refreshToken = data.refresh_token;
+         // const name = data.name;
+         // const role = data.role;
+         // const defaultLocale = data.defaultLocale;
+         // const userId = data.id;
 
          setCookie(null, 'access_token', accessToken, {
             maxAge: 604800,
             path: '/',
          });
 
-         // save refresh_token in cookies
-         setCookie(null, 'refresh_token', refreshToken, {
-            maxAge: 604800,
-            path: '/',
-         });
+         // // save refresh_token in cookies
+         // setCookie(null, 'refresh_token', refreshToken, {
+         //    maxAge: 604800,
+         //    path: '/',
+         // });
 
-         setCookie(null, 'role', role, { maxAge: 604800, path: '/' });
-         setCookie(null, 'name', name, { maxAge: 604800, path: '/' });
-         localStorage.setItem('name', name);
-         setCookie(null, 'defaultLocale', defaultLocale, { maxAge: 604800, path: '/' });
-         setCookie(null, 'id', userId, { maxAge: 604800, path: '/' });
-
-         const cookies = parseCookies();
-         const access = cookies['access_token'];
+         // setCookie(null, 'role', role, { maxAge: 604800, path: '/' });
+         // setCookie(null, 'name', name, { maxAge: 604800, path: '/' });
+         // localStorage.setItem('name', name);
+         // setCookie(null, 'defaultLocale', defaultLocale, { maxAge: 604800, path: '/' });
+         // setCookie(null, 'id', userId, { maxAge: 604800, path: '/' });
 
          return { accessToken };
       } catch (error) {
@@ -135,7 +125,7 @@ class AuthClient {
             phone: data.phoneNumber,
             avatar: data.avatar,
             address: data.address,
-            role: data.role,
+            role: extrackERole(data.role),
             email: data.email,
          } as UserAuth;
 
