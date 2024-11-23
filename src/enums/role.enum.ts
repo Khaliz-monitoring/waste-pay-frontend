@@ -1,8 +1,8 @@
 export enum ERole {
-   ADMIN,
-   DISTRICT,
-   COMMNUE,
-   USER,
+   ADMIN = 'ADMIN',
+   DISTRICT = 'DISTRICT',
+   COMMNUE = 'COMMNUE',
+   USER = 'USER',
 }
 
 export const extrackERole = (name: string): ERole => {

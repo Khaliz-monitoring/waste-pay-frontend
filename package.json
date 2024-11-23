@@ -39,6 +39,7 @@
       "@types/lodash": "^4.17.13",
       "@types/pluralize": "^0.0.33",
       "apexcharts": "3.49.2",
+      "i18next": "^23.10.1",
       "axios": "^1.5.0",
       "date-fns": "^4.1.0",
       "dayjs": "1.11.11",

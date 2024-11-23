@@ -1,7 +1,7 @@
 'use client';
 
 import AppDataTable from '@/components/DataTable/AppDataGridPro';
-import { Avatar, Box, Grid } from '@mui/material';
+import { Avatar, Box, Button, Grid } from '@mui/material';
 import type { Customer } from '@/components/dashboard/customer/customers-table';
 import dayjs from 'dayjs';
 import { DataTablePagination } from '@/components/DataTable';
@@ -10,6 +10,8 @@ import { EntityType } from '@/types/mange-user';
 import { manageUserStore } from '@/store/slices';
 import { useLayoutEffect } from 'react';
 import { stringAvatar } from '@/utils/string-avatar';
+import { useSelector } from 'react-redux';
+import { centerColumn, centerHeaderColumn } from '@/utils/columnProperties';
 
 const customers = [
    {
@@ -161,6 +163,9 @@ interface UserTableProps {
 
 const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
    const dispatch = useAppDispatch();
+   const dataTable = useSelector(manageUserStore.selectTableData(entityType));
+
+   console.log(dataTable);
 
    // fetch data table
    useLayoutEffect(() => {
@@ -172,40 +177,88 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
          field: 'name',
          flex: 0.5,
          minWidth: 100,
-         headerName: 'Name',
+         headerName: 'Tên',
+         ...centerHeaderColumn,
          renderCell(params) {
             return (
                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Avatar {...stringAvatar(params.row.name)} />
-                  <span style={{ fontWeight: 500 }}>{params.row.name}</span>
+                  <Avatar {...stringAvatar(params.row?.lastName)} />
+                  <span
+                     style={{ fontWeight: 500 }}
+                  >{`${params.row?.firstName} ${params.row?.lastName}`}</span>
                </Box>
             );
          },
       },
+      // {
+      //    field: 'email',
+      //    flex: 0.6,
+      //    minWidth: 100,
+      //    headerName: 'Email',
+      // },
       {
-         field: 'email',
-         flex: 0.6,
+         field: 'address',
+         flex: 0.9,
          minWidth: 100,
-         headerName: 'Email',
-      },
-      {
-         field: 'location',
-         flex: 0.5,
-         minWidth: 100,
-         headerName: 'Location',
+         headerName: 'Địa Chỉ',
+         ...centerHeaderColumn,
       },
       {
          field: 'phone',
-         flex: 0.5,
+         flex: 0.3,
          minWidth: 100,
          headerName: 'Phone',
+         ...centerHeaderColumn,
       },
       {
          field: 'manager',
-         flex: 0.5,
+         flex: 0.3,
          minWidth: 100,
-         headerName: 'Manager',
+         headerName: 'Quản Lý',
+         ...centerHeaderColumn,
       },
+      ...(entityType === 'user'
+         ? [
+              {
+                 field: 'paymentTime',
+                 flex: 0.4,
+                 minWidth: 150,
+                 headerName: 'Trạng Thái Thanh Toán',
+                 ...centerColumn,
+                 renderCell(params) {
+                    return (
+                       <>
+                          {params.row?.lastName.charAt(0) === 'S' ? (
+                             <span
+                                style={{
+                                   // backgroundColor: ' 	#AD373B',
+                                   border: '1px solid rgb(234, 85, 85)',
+                                   padding: '10px 20px',
+                                   borderRadius: 4,
+                                   cursor: 'pointer',
+                                   color: 'rgb(185, 0, 0)',
+                                }}
+                             >
+                                Còn nợ 40000đ
+                             </span>
+                          ) : (
+                             <span
+                                style={{
+                                   // backgroundColor: 'rgb(232, 255, 230)',
+                                   padding: '7px 15px',
+                                   borderRadius: 5,
+                                   color: 'green',
+                                }}
+                             >
+                                Hoàn thành
+                             </span>
+                          )}
+                       </>
+                    );
+                 },
+              },
+           ]
+         : []),
    ];
 
    const handleChangePage = (pageNo: number) => {
@@ -219,18 +272,16 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
    };
 
    return (
-      <Grid container sx={{ height: `calc(100vh - 240px)` }}>
-         <AppDataTable rows={customers} columns={columns} />
-         {/* <DataTablePagination
-            page={1}
-            perPage={10}
-            totalItems={200}
+      <Box sx={{ height: `calc(100vh - 270px)`, width: '100%' }}>
+         <AppDataTable rows={dataTable?.rows} columns={columns} getRowId={(params) => params.id} />
+         <DataTablePagination
+            page={dataTable?.pageNo}
+            perPage={dataTable?.pageSize}
+            totalItems={dataTable.totalItems}
             onChangePage={handleChangePage}
             onChangePerPage={handleChangePerPage}
-            lastUpdatedAt={clientLatestUpdatedTime}
-            lastUpdatedBy={serverLastUpdatedBy}
-         /> */}
-      </Grid>
+         />
+      </Box>
    );
 };
 

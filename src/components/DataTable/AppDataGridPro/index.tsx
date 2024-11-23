@@ -37,11 +37,8 @@ const AppDataTable: React.FC<any> = (props) => {
       currency,
       dataFilter,
       onCellClick,
-      getRowId,
-      rows,
       ...rest
    } = props;
-   const rowsWithId = rows.map((row) => addGridRowId(row, getRowId));
 
    return (
       <DataGridPro
@@ -50,7 +47,6 @@ const AppDataTable: React.FC<any> = (props) => {
          sx={{
             '& .MuiDataGrid-columnHeaderTitle': {
                whiteSpace: 'break-spaces',
-               lineHeight: 1,
             },
             '& .MuiDataGrid-cell': {
                '&:focus': {
@@ -62,7 +58,6 @@ const AppDataTable: React.FC<any> = (props) => {
          columnHeaderHeight={60}
          rowHeight={60}
          rowBufferPx={35}
-         rows={rowsWithId}
          onCellClick={onCellClick}
          {...rest}
       />

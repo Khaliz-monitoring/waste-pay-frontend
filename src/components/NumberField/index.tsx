@@ -68,12 +68,12 @@ const AppNumberField: React.FC<AppNumberFieldProps> = forwardRef((props, ref) =>
          }}
          hidden
          sx={{
-            '& .MuiInputBase-input': {
-               textAlign: 'right',
-               '&:focus': {
-                  textAlign: 'left',
-               },
-            },
+            // '& .MuiInputBase-input': {
+            //    textAlign: 'right',
+            //    '&:focus': {
+            //       textAlign: 'left',
+            //    },
+            // },
             ...(numberFieldProps.sx || {}),
          }}
       />

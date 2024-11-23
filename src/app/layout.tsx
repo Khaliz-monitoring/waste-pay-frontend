@@ -1,5 +1,7 @@
 import type { Viewport } from 'next';
 import * as React from 'react';
+import i18next from 'i18next';
+// import '@/i18n/locales/config';
 
 import '@/styles/global.css';
 import '@/theme/_global.css';
@@ -16,6 +18,7 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps): React.JSX.Element {
+   // i18next.changeLanguage('vn');
    return (
       <html lang="en">
          <body>

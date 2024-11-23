@@ -13,7 +13,7 @@ import { Box, Grid } from '@mui/material';
 export const metadata = { title: `Customers | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 export default function Page(): React.JSX.Element {
-   const entityType = 'district' as EntityType;
+   const entityType: EntityType = 'district';
 
    return (
       <Stack spacing={2}>

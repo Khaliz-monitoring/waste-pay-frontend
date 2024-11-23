@@ -2,15 +2,17 @@
 
 import { useEffect, useState } from 'react';
 
-import { Button, MenuItem, Pagination, styled, Typography } from '@mui/material';
+import { Button, Grid, Menu, MenuItem, Pagination, Stack, styled, Typography } from '@mui/material';
 
-import { usePopupState } from 'material-ui-popup-state/hooks';
+import { bindMenu, bindTrigger, usePopupState } from 'material-ui-popup-state/hooks';
 
 import { commonStore } from '@/store/slices';
 import { stringFormat } from '@/utils/formatString';
 import { useTranslation } from 'react-i18next';
 import type { NumberFormatValues } from 'react-number-format';
 import { useDispatch } from 'react-redux';
+import { ArrowDropDownIcon } from '@mui/x-date-pickers';
+import { AppNumberField } from '@/components/NumberField';
 const StyledPagination = styled(Pagination)(({ theme }) => ({
    '& .MuiPaginationItem-root': {
       minWidth: '23px !important',
@@ -39,6 +41,16 @@ const StyledGoButton = styled(Button)(({ theme }) => ({
    '&:hover': {
       opacity: 0.8,
       backgroundColor: theme.palette.secondary.dark,
+   },
+}));
+
+const StyledAppNumberField = styled(AppNumberField)(() => ({
+   '& .MuiInputBase-input': {
+      padding: 4,
+   },
+   '& .MuiOutlinedInput-root': {
+      paddingRight: 3,
+      borderRadius: 5,
    },
 }));
 
@@ -100,91 +112,83 @@ const DataTablePagination = (props) => {
    };
 
    return (
-      <>O</>
+      <>
+         <Stack
+            direction="row"
+            alignItems="center"
+            sx={{ mx: 1, color: 'secondary.dark', height: 45 }}
+         >
+            <Stack
+               direction="row"
+               spacing={0.5}
+               alignItems="center"
+               sx={{ width: '50%', color: 'black' }}
+            >
+               {lastUpdatedAt && (
+                  <div>
+                     {t('Last uploaded by ')} {lastUpdatedBy} {t('table.lastUpdatedAt')}{' '}
+                     {lastUpdatedAt}
+                  </div>
+               )}
+            </Stack>
 
-      // <>
-      //    <Stack
-      //       direction="row"
-      //       alignItems="center"
-      //       sx={{ mx: 1, color: 'secondary.dark', height: 45 }}
-      //    >
-      //       <Stack
-      //          direction="row"
-      //          spacing={0.5}
-      //          alignItems="center"
-      //          sx={{ width: '50%', color: 'black' }}
-      //       >
-      //          {lastUpdatedAt && (
-      //             <div>
-      //                {t('Last uploaded by ')} {lastUpdatedBy} {t('table.lastUpdatedAt')}{' '}
-      //                {lastUpdatedAt}
-      //             </div>
-      //          )}
-      //       </Stack>
-
-      //       {/* <Typography component="div" variant="body2" sx={{ fontSize: 10, fontWeight: 'fontWeightBold' }}>
-      //     {countSelectedItems} SELECTED ITEM(S)
-      //   </Typography> */}
-      //       <Stack
-      //          direction="row"
-      //          spacing={0.5}
-      //          alignItems="center"
-      //          justifyContent="end"
-      //          sx={{ width: '50%' }}
-      //       >
-      //          {/* Rows per page */}
-      //          <Stack direction="row" alignItems="center" spacing={0.5}>
-      //             <Typography component="div" variant="body1" sx={{ mr: 0.5 }}>
-      //                {t('table.rowsPerPage')}
-      //             </Typography>
-      //             <Stack
-      //                sx={{ cursor: 'pointer' }}
-      //                spacing={0.5}
-      //                direction="row"
-      //                alignItems="center"
-      //                {...bindTrigger(popupState)}
-      //             >
-      //                <Typography component="span" variant="body1">
-      //                   {perPage}
-      //                </Typography>
-      //                <ArrowDropDownIcon sx={{ ml: '0 !important' }} />
-      //             </Stack>
-      //          </Stack>
-      //          {/* Pagination */}
-      //          <StyledPagination count={count} onChange={handleChangePage} page={page} />
-      //          {/* Go to page */}
-      //          <Grid sx={{ width: 70 }}>
-      //             <AppNumberField
-      //                onPressEnter={handleGoToPage}
-      //                debounceDelay={100}
-      //                onChange={handleChangeGoToPage}
-      //                sx={{ width: 70 }}
-      //                decimalScale={0}
-      //                fixedDecimalScale={false}
-      //                value={numberGoToPage}
-      //                InputProps={{
-      //                   endAdornment: (
-      //                      <StyledGoButton
-      //                         type="submit"
-      //                         onClick={handleGoToPage}
-      //                         aria-label="go-to-page"
-      //                      >
-      //                         {t('go')}
-      //                      </StyledGoButton>
-      //                   ),
-      //                }}
-      //             />
-      //          </Grid>
-      //       </Stack>
-      //    </Stack>
-      //    <Menu
-      //       {...bindMenu(popupState)}
-      //       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      //       transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-      //    >
-      //       {renderPerPage()}
-      //    </Menu>
-      // </>
+            {/* <Typography component="div" variant="body2" sx={{ fontSize: 10, fontWeight: 'fontWeightBold' }}>
+          {countSelectedItems} SELECTED ITEM(S)
+        </Typography> */}
+            <Stack direction="row" alignItems="center" justifyContent="end" sx={{ width: '50%' }}>
+               {/* Rows per page */}
+               <Stack direction="row" alignItems="center" spacing={0.5}>
+                  <Typography component="div" variant="body1" sx={{ mr: 0.5 }}>
+                     {/* {t('table.rowsPerPage')} */}
+                     Số dòng mỗi trang
+                  </Typography>
+                  <Stack
+                     sx={{ cursor: 'pointer' }}
+                     spacing={0.5}
+                     direction="row"
+                     alignItems="center"
+                     {...bindTrigger(popupState)}
+                  >
+                     <Typography component="span" variant="body1">
+                        {perPage}
+                     </Typography>
+                     <ArrowDropDownIcon sx={{ ml: '0 !important' }} />
+                  </Stack>
+               </Stack>
+               {/* Pagination */}
+               <StyledPagination count={count} onChange={handleChangePage} page={page} />
+               {/* Go to page */}
+               <Grid sx={{ width: 70 }}>
+                  <StyledAppNumberField
+                     onPressEnter={handleGoToPage}
+                     debounceDelay={100}
+                     onChange={handleChangeGoToPage}
+                     decimalScale={0}
+                     fixedDecimalScale={false}
+                     value={numberGoToPage}
+                     InputProps={{
+                        endAdornment: (
+                           <StyledGoButton
+                              type="submit"
+                              onClick={handleGoToPage}
+                              aria-label="go-to-page"
+                           >
+                              Đi
+                           </StyledGoButton>
+                        ),
+                     }}
+                  />
+               </Grid>
+            </Stack>
+         </Stack>
+         <Menu
+            {...bindMenu(popupState)}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+         >
+            {renderPerPage()}
+         </Menu>
+      </>
    );
 };
 

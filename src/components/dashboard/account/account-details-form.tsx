@@ -39,19 +39,23 @@ export function AccountDetailsForm(): React.JSX.Element {
                   <Grid md={6} xs={12}>
                      <FormControl fullWidth required>
                         <InputLabel>Họ</InputLabel>
-                        <OutlinedInput value={user.firstName} label="First name" name="firstName" />
+                        <OutlinedInput
+                           value={user?.firstName}
+                           label="First name"
+                           name="firstName"
+                        />
                      </FormControl>
                   </Grid>
                   <Grid md={6} xs={12}>
                      <FormControl fullWidth required>
                         <InputLabel>Tên</InputLabel>
-                        <OutlinedInput value={user.lastName} label="Last name" name="lastName" />
+                        <OutlinedInput value={user?.lastName} label="Last name" name="lastName" />
                      </FormControl>
                   </Grid>
                   <Grid md={6} xs={12}>
                      <FormControl fullWidth required>
                         <InputLabel>Email address</InputLabel>
-                        <OutlinedInput value={user.email} label="Email address" name="email" />
+                        <OutlinedInput value={user?.email} label="Email address" name="email" />
                      </FormControl>
                   </Grid>
                   <Grid md={6} xs={12}>
@@ -61,7 +65,7 @@ export function AccountDetailsForm(): React.JSX.Element {
                            label="Phone number"
                            name="phone"
                            type="tel"
-                           value={user.phone}
+                           value={user?.phone}
                         />
                      </FormControl>
                   </Grid>

@@ -13,8 +13,6 @@ export function defineAbilitiesFor(user: UserAuth) {
       PureAbility as AbilityClass<AppAbility>
    );
 
-   console.log('userinfo ', user);
-
    if (_.includes([ERole.ADMIN], user?.role)) {
       can('manage', 'all');
    } else if (user?.role == ERole.DISTRICT) {

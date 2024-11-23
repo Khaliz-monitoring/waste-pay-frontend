@@ -122,9 +122,10 @@ class AuthClient {
          const userInfo = {
             firstName: data.firstname,
             lastName: data.lastname,
+            fullName: data.fullName,
             phone: data.phoneNumber,
             avatar: data.avatar,
-            address: data.address,
+            //address: data.address,
             role: extrackERole(data.role),
             email: data.email,
          } as UserAuth;

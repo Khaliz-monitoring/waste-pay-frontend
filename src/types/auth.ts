@@ -4,6 +4,7 @@ export type UserAuth = {
    id: number;
    firstName: string;
    lastName: string;
+   fullName: string;
    role: ERole;
    phone: string;
    email: string;

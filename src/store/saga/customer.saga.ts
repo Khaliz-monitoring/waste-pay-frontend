@@ -1,15 +1,44 @@
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
 import { manageUserStore } from '../slices';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { AddUserProps, EntityType } from '@/types/mange-user';
+import { AddUserProps, EntityType, TableState } from '@/types/mange-user';
 import manageUserApi from '@/api/manage-user.api';
+import { UserAuth } from '@/types/auth';
 
 // this function will be call when the first going to manage commune, district, customer pages
 function* firstFetchListUser(payload: PayloadAction<EntityType>) {
    const entityType: EntityType = payload.payload;
-   const { data } = yield call(manageUserApi.getListUserByFilter, { entityType });
+   const { selectedFilter } = yield all({
+      selectedFilter: select(manageUserStore.selectDataFilterByModelType(entityType)),
+   });
+   const { data } = yield call(manageUserApi.getListUserByFilter, selectedFilter);
 
-   yield put(manageUserStore.actions.setUserList({ entityType, userRecords: data }));
+   const userList: UserAuth[] = mappingTableData(data.content);
+
+   const tableData = {
+      rows: userList,
+      totalItems: data.totalElements,
+   } as TableState;
+
+   yield put(manageUserStore.actions.setUserList({ entityType, tableData }));
+}
+
+function mappingTableData(recordList: any[]): UserAuth[] {
+   let userList: UserAuth[] = [];
+   recordList.forEach((item) =>
+      userList.push({
+         id: item.id,
+         firstName: item.firstname,
+         lastName: item.lastname,
+         fullName: `${item.firstname} ${item.lastname}`,
+         phone: item.phone,
+         avatar: item.avatar,
+         address: `${item?.address?.houseStreet}, ${item?.address?.ward}, ${item?.address?.district}, ${item?.address?.city}`,
+         role: item.role,
+         email: item.email,
+      })
+   );
+   return userList;
 }
 
 function* addUserIntoList({ payload }: PayloadAction<AddUserProps>) {
@@ -28,4 +57,6 @@ function* watchAddUser() {
    yield takeEvery(manageUserStore.addUserAction, addUserIntoList);
 }
 
-export { watchFirstFetch, watchAddUser };
+export default function* watchManageCustomerSaga() {
+   yield all([fork(watchFirstFetch), fork(watchAddUser)]);
+}

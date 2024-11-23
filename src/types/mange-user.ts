@@ -1,29 +1,28 @@
-export interface User {
-   id: string;
-   name: string;
-   phone: string;
-   avatar: string;
-   address: string;
-   role: string;
-   email?: string;
+import { UserAuth } from './auth';
 
-   [key: string]: unknown;
-}
-
+/**
+ * table state
+ */
 export type TableState = {
-   rows: User[];
+   rows: UserAuth[];
    pageSize: number;
    pageNo: number;
    loading: boolean;
+   totalItems: number;
+};
+
+export type SelectedFilter = {
+   search: string;
 };
 
 export type ManageUserState = {
    tableState: TableState;
+   selectedFilter: SelectedFilter;
 };
 
 export type ManageUserReducer = {
    // data of customer page
-   customer: ManageUserState;
+   user: ManageUserState;
 
    // data of commune page
    commune: ManageUserState;
@@ -32,7 +31,7 @@ export type ManageUserReducer = {
    district: ManageUserState;
 };
 
-export type EntityType = 'customer' | 'commune' | 'district';
+export type EntityType = 'user' | 'commune' | 'district';
 
 /**
  * action props
@@ -43,8 +42,8 @@ export type SetUserListProps = {
    // The type of entity for which we're setting the user list (e.g: customer, commune, district)
    entityType: EntityType;
 
-   // the arrays of user to be associated with the specified entity type
-   userRecords: User[];
+   // the data of table: list record, pageNo,pageSize
+   tableData: TableState;
 };
 
 // Represent of action of setting a loading state for a specified entity type's table
