@@ -31,14 +31,20 @@ function mappingTableData(recordList: any[]): UserAuth[] {
          firstName: item.firstname,
          lastName: item.lastname,
          fullName: `${item.firstname} ${item.lastname}`,
-         phone: item.phone,
+         phone: item.phoneNumber,
          avatar: item.avatar,
-         address: `${item?.address?.houseStreet}, ${item?.address?.ward}, ${item?.address?.district}, ${item?.address?.city}`,
+         address: extractAddress(item?.address),
          role: item.role,
          email: item.email,
       })
    );
    return userList;
+}
+
+function extractAddress(address: any): string {
+   if (address)
+      return `${address?.houseStreet}, ${address?.ward}, ${address?.district}, ${address?.city}`;
+   return null;
 }
 
 function* addUserIntoList({ payload }: PayloadAction<AddUserProps>) {

@@ -158,7 +158,7 @@ const DataTablePagination = (props) => {
                {/* Pagination */}
                <StyledPagination count={count} onChange={handleChangePage} page={page} />
                {/* Go to page */}
-               <Grid sx={{ width: 70 }}>
+               {/* <Grid sx={{ width: 70 }}>
                   <StyledAppNumberField
                      onPressEnter={handleGoToPage}
                      debounceDelay={100}
@@ -178,7 +178,7 @@ const DataTablePagination = (props) => {
                         ),
                      }}
                   />
-               </Grid>
+               </Grid> */}
             </Stack>
          </Stack>
          <Menu
