@@ -17,9 +17,12 @@ import { usePopover } from '@/hooks/use-popover';
 import { MobileNav } from './mobile-nav';
 import { UserPopover } from './user-popover';
 import { NotifyPopover } from './notify-popup';
+import { getAvatar } from '@/utils/get-avatar.utils';
+import { useUser } from '@/hooks/use-user';
 
 export function MainNav(): React.JSX.Element {
    const [openNav, setOpenNav] = React.useState<boolean>(false);
+   const { user } = useUser();
 
    const userPopover = usePopover<HTMLDivElement>();
 
@@ -72,7 +75,7 @@ export function MainNav(): React.JSX.Element {
                   <Avatar
                      onClick={userPopover.handleOpen}
                      ref={userPopover.anchorRef}
-                     src="/assets/avatar.png"
+                     src={getAvatar(user?.avatar)}
                      sx={{ cursor: 'pointer' }}
                   />
                </Stack>

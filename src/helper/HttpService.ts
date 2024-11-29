@@ -14,7 +14,7 @@ class HttpService<GetList = any> {
       this.entity = plural(entity);
       axios.defaults.withCredentials = true;
       this.instance = axios.create({
-         baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+         baseURL: process.env.NEXT_PUBLIC_API_BACKEND,
       });
       this.instance.interceptors.response.use(this.handleSuccessRes, this.handleErrorRes);
    }

@@ -10,6 +10,7 @@ import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useUser } from '@/hooks/use-user';
+import { getAvatar } from '@/utils/get-avatar.utils';
 
 export function AccountInfo(): React.JSX.Element {
    const { user } = useUser();
@@ -19,7 +20,7 @@ export function AccountInfo(): React.JSX.Element {
          <CardContent>
             <Stack spacing={2} sx={{ alignItems: 'center' }}>
                <div>
-                  <Avatar src={user?.avatar} sx={{ height: '80px', width: '80px' }} />
+                  <Avatar src={getAvatar(user?.avatar)} sx={{ height: '80px', width: '80px' }} />
                </div>
                <Stack spacing={1} sx={{ textAlign: 'center' }}>
                   <Typography variant="h5">{`${user?.firstName} ${user?.lastName}`}</Typography>
