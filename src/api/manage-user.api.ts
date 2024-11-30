@@ -7,7 +7,7 @@ class ManageUserApi extends HttpService {
    };
 
    addUser = (data: AddUserProps) => {
-      return this.get<any>(`management/add-user`, data);
+      return this.post<any>(`management/add-user`, data);
    };
 }
 

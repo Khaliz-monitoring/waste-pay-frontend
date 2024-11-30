@@ -5,7 +5,7 @@ import AppDataTable from '@/components/DataTable/AppDataGridPro';
 import { ERole } from '@/enums/role.enum';
 import { useAppDispatch } from '@/store/hooks';
 import { manageUserStore } from '@/store/slices';
-import { EntityType, TableState } from '@/types/mange-user';
+import { TableState } from '@/types/mange-user';
 import { centerColumn, centerHeaderColumn } from '@/utils/columnProperties';
 import { getAvatar } from '@/utils/get-avatar.utils';
 import { stringAvatar } from '@/utils/string-avatar';
@@ -21,8 +21,6 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
    const dispatch = useAppDispatch();
    const dataTable = useSelector(manageUserStore.selectTableData(role));
 
-   console.log(dataTable);
-
    // fetch data table
    useLayoutEffect(() => {
       dispatch(manageUserStore.firstFetchAction(role));
@@ -37,14 +35,15 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          ...centerHeaderColumn,
          renderCell(params) {
             return (
-               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Avatar
-                     {...stringAvatar(params.row?.lastName)}
-                     src={getAvatar(params.row?.avatar)}
-                  />
+               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, height: '100%' }}>
+                  {params.row?.avatar ? (
+                     <Avatar src={getAvatar(params.row.avatar)} />
+                  ) : (
+                     <Avatar {...stringAvatar(params.row?.lastName)} />
+                  )}
                   <span
                      style={{ fontWeight: 500 }}
-                  >{`${params.row?.firstName} ${params.row?.lastName}`}</span>
+                  >{`${params.row?.firstName ? params.row?.firstName : ''} ${params.row?.lastName ? params.row?.lastName : ''}`}</span>
                </Box>
             );
          },
@@ -87,7 +86,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                  renderCell(params) {
                     return (
                        <>
-                          {params.row?.lastName.charAt(0) === 'S' ? (
+                          {params.row?.lastName?.charAt(0) === 'S' ? (
                              <span
                                 style={{
                                    // backgroundColor: ' 	#AD373B',

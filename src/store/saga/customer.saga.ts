@@ -1,5 +1,5 @@
 import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
-import { manageUserStore } from '../slices';
+import { commonStore, manageUserStore } from '../slices';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { AddUserProps, EntityType, TableState } from '@/types/mange-user';
 import manageUserApi from '@/api/manage-user.api';
@@ -50,9 +50,11 @@ function extractAddress(address: any): string {
 
 function* addUserIntoList({ payload }: PayloadAction<AddUserProps>) {
    try {
-      const response = yield call(manageUserApi.addUser, payload);
+      const { data } = yield call(manageUserApi.addUser, payload);
+      yield put(commonStore.actions.setSuccessMessage(data.message));
    } catch (error) {
       console.log(error);
+      yield put(commonStore.actions.setErrorMessage(error.message));
    }
 }
 

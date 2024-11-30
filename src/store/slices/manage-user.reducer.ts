@@ -64,7 +64,6 @@ export const selectState = (state: RootState) => state[name];
 
 export const selectTableData = (role: ERole) =>
    createSelector(selectState, (state) => {
-      console.log('role: ', role);
       return state[role].tableState;
    });
 

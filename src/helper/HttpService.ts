@@ -1,8 +1,8 @@
-import axios from 'axios';
 import type { AxiosError, AxiosInstance, ResponseType } from 'axios';
+import axios from 'axios';
 import type { GetServerSidePropsContext } from 'next';
 import Router from 'next/router';
-import { parseCookies, setCookie } from 'nookies';
+import { parseCookies } from 'nookies';
 import { plural } from 'pluralize';
 
 class HttpService<GetList = any> {
@@ -20,7 +20,11 @@ class HttpService<GetList = any> {
    }
 
    private handleSuccessRes({ data, status }): any {
-      return { data: JSON.parse(data), status };
+      if (typeof data === 'string') {
+         data = JSON.parse(data);
+      }
+
+      return { data, status };
    }
 
    private async handleErrorRes(error: AxiosError) {

@@ -10,6 +10,7 @@ import { LocalizationProvider } from '@/components/core/localization-provider';
 import { ThemeProvider } from '@/components/core/theme-provider/theme-provider';
 import { UserProvider } from '@/contexts/user-context';
 import StoreProvider from '@/store/StoreProvider';
+import AppMessagePopup from '@/components/MessagePopup';
 
 export const viewport = { width: 'device-width', initialScale: 1 } satisfies Viewport;
 
@@ -24,6 +25,7 @@ export default function Layout({ children }: LayoutProps): React.JSX.Element {
          <body>
             <LocalizationProvider>
                <StoreProvider>
+                  <AppMessagePopup />
                   <UserProvider>
                      <ThemeProvider>{children}</ThemeProvider>
                   </UserProvider>
