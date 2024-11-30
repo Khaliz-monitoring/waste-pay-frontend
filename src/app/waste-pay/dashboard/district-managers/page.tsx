@@ -7,13 +7,13 @@ import AddUserDialog from '@/components/dashboard/createDIalog';
 import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
 import UserTable from '@/components/dashboard/customer/Table/UserTable';
 import { config } from '@/config';
-import { EntityType } from '@/types/mange-user';
+import { ERole } from '@/enums/role.enum';
 import { Box, Grid } from '@mui/material';
 
 export const metadata = { title: `Customers | Dashboard | ${config.site.name}` } satisfies Metadata;
 
 export default function Page(): React.JSX.Element {
-   const entityType: EntityType = 'district';
+   const role: ERole = ERole.DISTRICT;
 
    return (
       <Stack spacing={2}>
@@ -22,13 +22,13 @@ export default function Page(): React.JSX.Element {
                <Typography variant="h4">Quản Lý Cấp Huyện</Typography>
             </Stack>
             <Box>
-               <AddUserDialog entityType={entityType} />
+               <AddUserDialog role={role} />
             </Box>
          </Stack>
          <CustomersFilters />
 
          <Grid container>
-            <UserTable entityType={entityType} />
+            <UserTable role={role} />
          </Grid>
       </Stack>
    );

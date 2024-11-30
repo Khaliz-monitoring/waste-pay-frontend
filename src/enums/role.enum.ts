@@ -1,7 +1,7 @@
 export enum ERole {
    ADMIN = 'ADMIN',
    DISTRICT = 'DISTRICT',
-   COMMNUE = 'COMMNUE',
+   COMMUNE = 'COMMUNE',
    USER = 'USER',
 }
 

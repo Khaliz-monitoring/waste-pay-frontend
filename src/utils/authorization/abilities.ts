@@ -18,7 +18,7 @@ export function defineAbilitiesFor(user: UserAuth) {
    } else if (user?.role == ERole.DISTRICT) {
       can('view', 'all');
       cannot('view', [paths.dashboard.districtManagers]);
-   } else if (user?.role == ERole.COMMNUE) {
+   } else if (user?.role == ERole.COMMUNE) {
       can('view', 'all');
       cannot('view', [paths.dashboard.districtManagers, paths.dashboard.communeManagers]);
    } else {

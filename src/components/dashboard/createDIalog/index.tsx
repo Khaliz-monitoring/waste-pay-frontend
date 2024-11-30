@@ -1,32 +1,26 @@
 'use client';
 
-import { EntityType } from '@/types/mange-user';
-import {
-   Box,
-   Button,
-   Dialog,
-   Divider,
-   IconButton,
-   Popover,
-   TextField,
-   Typography,
-} from '@mui/material';
-import React, { useEffect, useState } from 'react';
-import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
-import ClearIcon from '@mui/icons-material/Clear';
+import { ERole } from '@/enums/role.enum';
 import { useAppDispatch } from '@/store/hooks';
 import { manageUserStore } from '@/store/slices';
+import ClearIcon from '@mui/icons-material/Clear';
+import { Box, Button, Divider, IconButton, Popover, TextField, Typography } from '@mui/material';
+import { Plus as PlusIcon } from '@phosphor-icons/react/dist/ssr/Plus';
+import React, { useEffect, useState } from 'react';
 
 interface AddUserDialogProps {
-   entityType: EntityType;
+   role: ERole;
 }
 
-const AddUserDialog: React.FC<AddUserDialogProps> = ({ entityType }) => {
+const AddUserDialog: React.FC<AddUserDialogProps> = ({ role }) => {
    const dispatch = useAppDispatch();
    const [open, setOpen] = useState(false);
    const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-   const [email, setEmail] = useState('');
-   const [emailError, setEmailError] = useState(false);
+   //const [email, setEmail] = useState('');
+   //const [emailError, setEmailError] = useState(false);
+   const [phoneNumber, setPhoneNumber] = useState('');
+
+   const [phoneNumberError, setPhoneNumberError] = useState(false);
    const [enableSubmit, setEnableSubmit] = useState(false);
 
    const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -39,27 +33,33 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ entityType }) => {
    };
 
    const handleEmailChange = (e) => {
-      setEmail(e.target.value);
-      if (e.target.validity.valid) {
-         setEmailError(false);
+      const phoneStr = e.target.value;
+      setPhoneNumber(phoneStr);
+      checkValidPhoneNumber(phoneStr);
+   };
+
+   const checkValidPhoneNumber = (phoneStr: string) => {
+      // check input is only number
+      if (!/^\d*$/.test(phoneStr) || (phoneStr.length !== 10 && phoneStr.length !== 11)) {
+         setPhoneNumberError(true);
       } else {
-         setEmailError(true);
+         setPhoneNumberError(false);
       }
    };
 
    const handleSubmit = () => {
-      if (email !== '' && !emailError) {
-         dispatch(manageUserStore.addUserAction({ entityType, email }));
+      if (phoneNumber !== '' && !phoneNumberError) {
+         dispatch(manageUserStore.addUserAction({ role, phoneNumber }));
       }
    };
 
    useEffect(() => {
-      if (email !== '' && !emailError) {
+      if (phoneNumber !== '' && !phoneNumberError) {
          setEnableSubmit(true);
       } else {
          setEnableSubmit(false);
       }
-   }, [email, emailError]);
+   }, [phoneNumber, phoneNumberError]);
 
    return (
       <>
@@ -110,16 +110,17 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ entityType }) => {
                </Box>
                <Divider />
                <TextField
-                  value={email}
+                  value={phoneNumber}
                   onChange={handleEmailChange}
                   required
                   sx={{ marginX: 2, marginY: 1 }}
-                  placeholder={'Enter email'}
+                  placeholder={'Nhập số điện thoại'}
                   inputProps={{
-                     type: 'email',
+                     type: 'tel',
+                     max: 12,
                   }}
-                  error={emailError}
-                  helperText={emailError ? 'Please enter a valid email' : ''}
+                  error={phoneNumberError}
+                  helperText={phoneNumberError ? 'Please enter a valid phone' : ''}
                />
 
                <Divider />

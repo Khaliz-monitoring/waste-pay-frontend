@@ -68,7 +68,7 @@ class AuthClient {
       };
       try {
          const res = await axios.post(
-            `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/authenticate`,
+            `${process.env.NEXT_PUBLIC_API_BACKEND}/auth/authenticate`,
             transformData,
             options
          );

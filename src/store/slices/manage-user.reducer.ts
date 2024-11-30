@@ -1,16 +1,15 @@
-import { createAction, createSelector, createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../config';
+import { ERole } from '@/enums/role.enum';
 import {
    AddUserProps,
-   EntityType,
    ManageUserReducer,
    SelectedFilter,
    SetLoadingTableProps,
    SetUserListProps,
    TableState,
 } from '@/types/mange-user';
-import { extrackERole } from '@/enums/role.enum';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createSelector, createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../config';
 
 export const name = 'manage-user';
 
@@ -27,15 +26,15 @@ const selectedFilter: SelectedFilter = {
 };
 
 const initialState: ManageUserReducer = {
-   user: {
+   [ERole.USER]: {
       tableState: defaultTableState,
       selectedFilter,
    },
-   commune: {
+   [ERole.COMMUNE]: {
       tableState: defaultTableState,
       selectedFilter,
    },
-   district: {
+   [ERole.DISTRICT]: {
       tableState: defaultTableState,
       selectedFilter,
    },
@@ -47,8 +46,8 @@ export const userSilce = createSlice({
    reducers: {
       // set list user for page based on type('customer' | 'commune' | 'district')
       setUserList: (state, { payload }: PayloadAction<SetUserListProps>) => {
-         const { entityType, tableData } = payload;
-         state[entityType].tableState = { ...state[entityType].tableState, ...tableData };
+         const { role, tableData } = payload;
+         state[role].tableState = { ...state[role].tableState, ...tableData };
       },
 
       // set loading state for a specified entity type's table
@@ -63,24 +62,27 @@ export const userSilce = createSlice({
 
 export const selectState = (state: RootState) => state[name];
 
-export const selectTableData = (entityType: EntityType) =>
-   createSelector(selectState, (state) => state[entityType].tableState);
-
-export const selectDataFilterByModelType = (entityType: EntityType) =>
+export const selectTableData = (role: ERole) =>
    createSelector(selectState, (state) => {
-      const modelType = state[entityType];
+      console.log('role: ', role);
+      return state[role].tableState;
+   });
+
+export const selectDataFilterByModelType = (role: ERole) =>
+   createSelector(selectState, (state) => {
+      const modelType = state[role];
 
       return {
          pageNo: modelType.tableState.pageNo,
          pageSize: modelType.tableState.pageSize,
-         entityType,
+         role,
          ...modelType.selectedFilter,
       };
    });
 
 /* =============== Actions ================ */
 
-export const firstFetchAction = createAction<EntityType>(`${name}/FIRST_FETCH`);
+export const firstFetchAction = createAction<ERole>(`${name}/FIRST_FETCH`);
 
 export const addUserAction = createAction<AddUserProps>(`${name}/ADD_USER`);
 

@@ -1,3 +1,4 @@
+import { ERole } from '@/enums/role.enum';
 import { UserAuth } from './auth';
 
 /**
@@ -22,13 +23,13 @@ export type ManageUserState = {
 
 export type ManageUserReducer = {
    // data of customer page
-   user: ManageUserState;
+   [ERole.USER]: ManageUserState;
 
    // data of commune page
-   commune: ManageUserState;
+   [ERole.COMMUNE]: ManageUserState;
 
    // data of district page
-   district: ManageUserState;
+   [ERole.DISTRICT]: ManageUserState;
 };
 
 export type EntityType = 'user' | 'commune' | 'district';
@@ -40,7 +41,7 @@ export type EntityType = 'user' | 'commune' | 'district';
 // Represent the action of setting  a list of users  for a particular entity type
 export type SetUserListProps = {
    // The type of entity for which we're setting the user list (e.g: customer, commune, district)
-   entityType: EntityType;
+   role: ERole;
 
    // the data of table: list record, pageNo,pageSize
    tableData: TableState;
@@ -58,8 +59,8 @@ export type SetLoadingTableProps = {
 // Represent the action of adding new user for a specified entity type's table
 export type AddUserProps = {
    // the type of entity for which we're inserting for a specified entity type's table
-   entityType: EntityType;
+   role: ERole;
 
    // email of user you want to add into table
-   email: string;
+   phoneNumber: string;
 };

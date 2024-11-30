@@ -2,28 +2,30 @@
 
 import { DataTablePagination } from '@/components/DataTable';
 import AppDataTable from '@/components/DataTable/AppDataGridPro';
+import { ERole } from '@/enums/role.enum';
 import { useAppDispatch } from '@/store/hooks';
 import { manageUserStore } from '@/store/slices';
 import { EntityType, TableState } from '@/types/mange-user';
 import { centerColumn, centerHeaderColumn } from '@/utils/columnProperties';
+import { getAvatar } from '@/utils/get-avatar.utils';
 import { stringAvatar } from '@/utils/string-avatar';
 import { Avatar, Box } from '@mui/material';
 import { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 interface UserTableProps {
-   entityType: EntityType;
+   role: ERole;
 }
 
-const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
+const UserTable: React.FC<UserTableProps> = ({ role }) => {
    const dispatch = useAppDispatch();
-   const dataTable = useSelector(manageUserStore.selectTableData(entityType));
+   const dataTable = useSelector(manageUserStore.selectTableData(role));
 
    console.log(dataTable);
 
    // fetch data table
    useLayoutEffect(() => {
-      dispatch(manageUserStore.firstFetchAction(entityType));
+      dispatch(manageUserStore.firstFetchAction(role));
    }, []);
 
    const columns = [
@@ -36,7 +38,10 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
          renderCell(params) {
             return (
                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <Avatar {...stringAvatar(params.row?.lastName)} />
+                  <Avatar
+                     {...stringAvatar(params.row?.lastName)}
+                     src={getAvatar(params.row?.avatar)}
+                  />
                   <span
                      style={{ fontWeight: 500 }}
                   >{`${params.row?.firstName} ${params.row?.lastName}`}</span>
@@ -71,7 +76,7 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
          headerName: 'Quản Lý',
          ...centerHeaderColumn,
       },
-      ...(entityType === 'user'
+      ...(role === ERole.USER
          ? [
               {
                  field: 'paymentTime',
@@ -117,14 +122,14 @@ const UserTable: React.FC<UserTableProps> = ({ entityType }) => {
 
    const handleChangePage = (pageNo: number) => {
       const tableData = { pageNo } as TableState;
-      dispatch(manageUserStore.actions.setUserList({ entityType, tableData }));
-      dispatch(manageUserStore.firstFetchAction(entityType));
+      dispatch(manageUserStore.actions.setUserList({ role, tableData }));
+      dispatch(manageUserStore.firstFetchAction(role));
    };
 
    const handleChangePerPage = (pageSize: number) => {
       const tableData = { pageSize } as TableState;
 
-      dispatch(manageUserStore.actions.setUserList({ entityType, tableData }));
+      dispatch(manageUserStore.actions.setUserList({ role, tableData }));
       handleChangePage(1);
    };
 

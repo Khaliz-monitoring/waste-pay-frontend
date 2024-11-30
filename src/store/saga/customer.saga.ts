@@ -4,12 +4,13 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { AddUserProps, EntityType, TableState } from '@/types/mange-user';
 import manageUserApi from '@/api/manage-user.api';
 import { UserAuth } from '@/types/auth';
+import { ERole } from '@/enums/role.enum';
 
 // this function will be call when the first going to manage commune, district, customer pages
-function* firstFetchListUser(payload: PayloadAction<EntityType>) {
-   const entityType: EntityType = payload.payload;
+function* firstFetchListUser(payload: PayloadAction<ERole>) {
+   const role: ERole = payload.payload;
    const { selectedFilter } = yield all({
-      selectedFilter: select(manageUserStore.selectDataFilterByModelType(entityType)),
+      selectedFilter: select(manageUserStore.selectDataFilterByModelType(role)),
    });
    const { data } = yield call(manageUserApi.getListUserByFilter, selectedFilter);
 
@@ -20,7 +21,7 @@ function* firstFetchListUser(payload: PayloadAction<EntityType>) {
       totalItems: data.totalElements,
    } as TableState;
 
-   yield put(manageUserStore.actions.setUserList({ entityType, tableData }));
+   yield put(manageUserStore.actions.setUserList({ role, tableData }));
 }
 
 function mappingTableData(recordList: any[]): UserAuth[] {
