@@ -1,10 +1,11 @@
+import manageUserApi from '@/api/manage-user.api';
+import { ERole } from '@/enums/role.enum';
+import { extrackEUserState as extractEUserState } from '@/enums/user-state.enum';
+import { UserAuth } from '@/types/auth';
+import { AddUserProps, TableState } from '@/types/mange-user';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
 import { commonStore, manageUserStore } from '../slices';
-import { PayloadAction } from '@reduxjs/toolkit';
-import { AddUserProps, EntityType, TableState } from '@/types/mange-user';
-import manageUserApi from '@/api/manage-user.api';
-import { UserAuth } from '@/types/auth';
-import { ERole } from '@/enums/role.enum';
 
 // this function will be call when the first going to manage commune, district, customer pages
 function* firstFetchListUser(payload: PayloadAction<ERole>) {
@@ -37,6 +38,7 @@ function mappingTableData(recordList: any[]): UserAuth[] {
          address: extractAddress(item?.address),
          role: item.role,
          email: item.email,
+         state: extractEUserState(item.state.name),
       })
    );
    return userList;

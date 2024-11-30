@@ -1,4 +1,5 @@
 import { ERole } from '@/enums/role.enum';
+import { EUserState } from '@/enums/user-state.enum';
 
 export type UserAuth = {
    id: number;
@@ -10,4 +11,5 @@ export type UserAuth = {
    email: string;
    avatar: string;
    address: string;
+   state: EUserState;
 };

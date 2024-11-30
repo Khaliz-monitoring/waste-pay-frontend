@@ -12,6 +12,7 @@ import { stringAvatar } from '@/utils/string-avatar';
 import { Avatar, Box } from '@mui/material';
 import { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
+import StatusButton from './StatusButton';
 
 interface UserTableProps {
    role: ERole;
@@ -117,6 +118,16 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
               },
            ]
          : []),
+      {
+         field: 'status',
+         flex: 0.4,
+         minWidth: 150,
+         headerName: 'Trạng Thái',
+         ...centerColumn,
+         renderCell(params) {
+            return <StatusButton state={params.row?.state} />;
+         },
+      },
    ];
 
    const handleChangePage = (pageNo: number) => {
