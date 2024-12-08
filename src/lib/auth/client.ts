@@ -4,6 +4,7 @@ import { UserAuth } from '@/types/auth';
 
 import axios from 'axios';
 import nookies, { setCookie } from 'nookies';
+import { extractEUserState } from '../../enums/user-state.enum';
 
 function generateToken(): string {
    const arr = new Uint8Array(12);
@@ -125,14 +126,16 @@ class AuthClient {
             fullName: data.fullName,
             phone: data.phoneNumber,
             avatar: data.avatar,
-            //address: data.address,
+            address: data.address,
             role: extrackERole(data.role),
             email: data.email,
+            state: extractEUserState(data.state.name),
          } as UserAuth;
 
          return { data: userInfo };
       } catch (error) {
          //return { error: 'Failed to authenticate user' };
+         console.log(error);
          return { data: null };
       }
    }

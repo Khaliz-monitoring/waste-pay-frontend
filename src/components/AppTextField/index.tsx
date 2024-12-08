@@ -96,7 +96,7 @@ const AppTextField: React.FC<AppTextFieldProps> = (props) => {
    // }, [disabled, loading, generateCode, tooltip, onGenerateCode])
 
    return (
-      <FormControllerErrorMessage title={helperText} open={openTooltip}>
+      <FormControllerErrorMessage title={helperText} open={false}>
          <TextField
             value={textValue}
             disabled={disabled}
@@ -111,6 +111,7 @@ const AppTextField: React.FC<AppTextFieldProps> = (props) => {
                // endAdornment: renderGenerateIcon(),
                ...InputProps,
             }}
+            helperText={helperText}
             {...textFieldProps}
          />
       </FormControllerErrorMessage>

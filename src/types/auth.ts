@@ -10,6 +10,28 @@ export type UserAuth = {
    phone: string;
    email: string;
    avatar: string;
-   address: string;
+   address: Address;
    state: EUserState;
+};
+
+export type Province = {
+   fullName: string;
+   code: string;
+};
+
+export type District = {
+   fullName: string;
+   province: Province;
+   code: string;
+};
+
+export type Ward = {
+   fullName: string;
+   district: District;
+   code: string;
+};
+
+export type Address = {
+   ward: Ward;
+   name: string;
 };

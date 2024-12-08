@@ -1,5 +1,5 @@
 import type { NumberFormatValues, NumericFormatProps } from 'react-number-format';
-import type { AppTextFieldProps } from '@/components/TextField/type';
+import type { AppTextFieldProps } from '@/components/AppTextField/type';
 
 export type NumberFormatProps = Omit<
    NumericFormatProps,

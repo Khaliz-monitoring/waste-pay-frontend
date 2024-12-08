@@ -3,7 +3,7 @@
 import { forwardRef } from 'react';
 import { useController } from 'react-hook-form';
 
-import AppTextField from '@/components/TextField';
+import AppTextField from '@/components/AppTextField';
 import _ from 'lodash';
 
 import type { ControlledTextFieldProps } from './type';

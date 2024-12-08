@@ -4,6 +4,6 @@ export enum EUserState {
    LOCKED = 'Bị khóa',
 }
 
-export const extrackEUserState = (name: string): EUserState => {
+export const extractEUserState = (name: string): EUserState => {
    return EUserState[name as keyof typeof EUserState];
 };

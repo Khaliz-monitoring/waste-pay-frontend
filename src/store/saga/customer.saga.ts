@@ -1,7 +1,7 @@
 import manageUserApi from '@/api/manage-user.api';
 import { ERole } from '@/enums/role.enum';
-import { extrackEUserState as extractEUserState } from '@/enums/user-state.enum';
-import { UserAuth } from '@/types/auth';
+import { extractEUserState as extractEUserState } from '@/enums/user-state.enum';
+import { Address, UserAuth } from '@/types/auth';
 import { AddUserProps, TableState } from '@/types/mange-user';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
@@ -35,19 +35,13 @@ function mappingTableData(recordList: any[]): UserAuth[] {
          fullName: `${item.firstname} ${item.lastname}`,
          phone: item.phoneNumber,
          avatar: item.avatar,
-         address: extractAddress(item?.address),
+         address: item?.address,
          role: item.role,
          email: item.email,
          state: extractEUserState(item.state.name),
       })
    );
    return userList;
-}
-
-function extractAddress(address: any): string {
-   if (address)
-      return `${address?.houseStreet}, ${address?.ward}, ${address?.district}, ${address?.city}`;
-   return null;
 }
 
 function* addUserIntoList({ payload }: PayloadAction<AddUserProps>) {

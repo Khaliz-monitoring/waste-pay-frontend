@@ -1,5 +1,5 @@
 // import type { UseControllerOptions, UseControllerProps } from 'react-hook-form'
-import type { AppTextFieldProps } from '@/components/TextField/type';
+import type { AppTextFieldProps } from '@/components/AppTextField/type';
 
 export interface ControlledTextFieldProps
    extends Omit<AppTextFieldProps, 'name' | 'variant'>,

@@ -14,6 +14,8 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useUser } from '@/hooks/use-user';
+import ExtenalLabelTextField from '@/components/common/ExtenalLabelTextField';
+import { styled } from '@mui/material';
 
 const states = [
    { value: 'alabama', label: 'Alabama' },
@@ -22,8 +24,21 @@ const states = [
    { value: 'los-angeles', label: 'Los Angeles' },
 ] as const;
 
+const StyledExtenalLabelTextField = styled(ExtenalLabelTextField)(() => ({
+   '& .MuiOutlinedInput-input.Mui-disabled': {
+      color: 'black',
+      '-webkit-text-fill-color': 'unset',
+   },
+}));
+
 export function AccountDetailsForm(): React.JSX.Element {
    const { user } = useUser();
+
+   const [openUpdateUser, setOpenUpdateUser] = React.useState(false);
+
+   const handleCloseUpdateUserDialog = () => {
+      setOpenUpdateUser(false);
+   };
 
    return (
       <form
@@ -32,65 +47,35 @@ export function AccountDetailsForm(): React.JSX.Element {
          }}
       >
          <Card>
-            <CardHeader subheader="The information can be edited" title="Profile" />
+            <CardHeader
+               title="Thông tin tài khoản"
+               // subheader="The information can be edited"
+            />
             <Divider />
             <CardContent>
-               <Grid container spacing={3}>
+               <Grid container spacing={2}>
                   <Grid md={6} xs={12}>
-                     <FormControl fullWidth required>
-                        <InputLabel>Họ</InputLabel>
-                        <OutlinedInput
-                           value={user?.firstName}
-                           label="First name"
-                           name="firstName"
-                        />
-                     </FormControl>
+                     <StyledExtenalLabelTextField
+                        label={'Họ tên'}
+                        value={user?.fullName}
+                        disabled
+                     />
                   </Grid>
+
                   <Grid md={6} xs={12}>
-                     <FormControl fullWidth required>
-                        <InputLabel>Tên</InputLabel>
-                        <OutlinedInput value={user?.lastName} label="Last name" name="lastName" />
-                     </FormControl>
+                     <StyledExtenalLabelTextField
+                        label={'Số điện thoại'}
+                        value={user?.phone}
+                        disabled
+                     />
                   </Grid>
-                  <Grid md={6} xs={12}>
-                     <FormControl fullWidth required>
-                        <InputLabel>Email address</InputLabel>
-                        <OutlinedInput value={user?.email} label="Email address" name="email" />
-                     </FormControl>
-                  </Grid>
-                  <Grid md={6} xs={12}>
-                     <FormControl fullWidth>
-                        <InputLabel>Phone number</InputLabel>
-                        <OutlinedInput
-                           label="Phone number"
-                           name="phone"
-                           type="tel"
-                           value={user?.phone}
-                        />
-                     </FormControl>
-                  </Grid>
-                  <Grid md={6} xs={12}>
-                     <FormControl fullWidth>
-                        <InputLabel>State</InputLabel>
-                        <Select
-                           defaultValue="New York"
-                           label="State"
-                           name="state"
-                           variant="outlined"
-                        >
-                           {states.map((option) => (
-                              <MenuItem key={option.value} value={option.value}>
-                                 {option.label}
-                              </MenuItem>
-                           ))}
-                        </Select>
-                     </FormControl>
-                  </Grid>
-                  <Grid md={6} xs={12}>
-                     <FormControl fullWidth>
-                        <InputLabel>City</InputLabel>
-                        <OutlinedInput label="City" />
-                     </FormControl>
+
+                  <Grid md={12} xs={12}>
+                     <StyledExtenalLabelTextField
+                        label={'Địa chỉ'}
+                        value={user?.address}
+                        disabled
+                     />
                   </Grid>
                </Grid>
             </CardContent>
