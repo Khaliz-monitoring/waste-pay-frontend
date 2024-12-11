@@ -2,11 +2,17 @@
 
 import AppAutocomplete from '@/components/Autocomplete';
 import ExtenalLabelTextField from '@/components/common/ExtenalLabelTextField';
+import {
+   EAdministrativeLevel,
+   extractEAdministrativeLevel,
+} from '@/enums/administrativeLevel.enum';
 import { EUserState } from '@/enums/user-state.enum';
 import { useUser } from '@/hooks/use-user';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { administrativeLevelStore } from '@/store/slices';
 import { checkValidPassword } from '@/utils/checkFormatPassword';
 import { Box, Button, Dialog, styled, TextField, Typography } from '@mui/material';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useLayoutEffect, useState } from 'react';
 
 const StyledTextField = styled(TextField)(() => ({
    '& .MuiTextField-root': {
@@ -76,6 +82,13 @@ const StyledAppAutocomplete = styled(AppAutocomplete)(() => ({
 
 const UpdateUserDialog = () => {
    const { user } = useUser();
+   const dispatch = useAppDispatch();
+   const administrativeLevelFilterOptions = useAppSelector(
+      administrativeLevelStore.selectFilterOptions
+   );
+   const administrativeLevelSelectedFilter = useAppSelector(
+      administrativeLevelStore.selectSelectedFilter
+   );
 
    const [open, setOpen] = useState(false);
    // const addressOptions = useAppSelector();
@@ -122,8 +135,6 @@ const UpdateUserDialog = () => {
       }
    });
 
-   const onSubmit = () => {};
-
    /**
     * update adjusted user on change Address
     * @param field
@@ -132,8 +143,23 @@ const UpdateUserDialog = () => {
    const handleChangeAddress = (field: string, option: any) => {
       const address = { ...adjustedUser.address };
       address[field] = option;
-      setAdjustedUser((prev) => ({ ...prev, address }));
+
+      dispatch(
+         administrativeLevelStore.updateSelectedFilter({
+            field: extractEAdministrativeLevel(field),
+            option,
+         })
+      );
    };
+
+   useLayoutEffect(() => {
+      dispatch(
+         administrativeLevelStore.fetchAdministrateLevel({
+            administrativeLevel: EAdministrativeLevel.PROVINCE,
+            parentCode: null,
+         })
+      );
+   }, []);
 
    return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
@@ -195,27 +221,38 @@ const UpdateUserDialog = () => {
                   </Typography>
                   <Box sx={{ display: 'flex', width: '100%', gap: 1 }}>
                      <StyledAppAutocomplete
-                        value={province}
-                        onChange={(option) => handleChangeAddress('PROVINCE', option)}
-                        options={[]}
+                        value={administrativeLevelSelectedFilter.PROVINCE}
+                        onChange={(e, option) => handleChangeAddress('PROVINCE', option)}
+                        options={administrativeLevelFilterOptions.PROVINCE}
                         label="Tỉnh / Thành phố"
+                        primaryKeyOption="name"
                         sx={{ flexGrow: 1 }}
+                        renderOption={(prop, option) => `${option.name}`}
+                        getOptionLabel={(option) => `${option.name}`}
                      />
 
                      <StyledAppAutocomplete
-                        value={district}
-                        onChange={(option) => handleChangeAddress('DISTRICT', option)}
-                        options={[]}
+                        value={administrativeLevelSelectedFilter.DISTRICT}
+                        onChange={(e, option) => handleChangeAddress('DISTRICT', option)}
+                        options={administrativeLevelFilterOptions.DISTRICT}
                         label="Quận / Huyện"
+                        primaryKeyOption="name"
                         sx={{ flexGrow: 1 }}
+                        disabled={!administrativeLevelSelectedFilter.PROVINCE}
+                        renderOption={(prop, option) => `${option.name}`}
+                        getOptionLabel={(option) => `${option.name}`}
                      />
 
                      <StyledAppAutocomplete
-                        value={ward}
-                        onChange={(option) => handleChangeAddress('WARD', option)}
-                        options={[]}
+                        value={administrativeLevelSelectedFilter.WARD}
+                        onChange={(e, option) => handleChangeAddress('WARD', option)}
+                        options={administrativeLevelFilterOptions.WARD}
                         label="Xã / Thị Trấn"
+                        primaryKeyOption="name"
+                        disabled={!administrativeLevelSelectedFilter.DISTRICT}
                         sx={{ flexGrow: 1 }}
+                        renderOption={(prop, option) => `${option.name}`}
+                        getOptionLabel={(option) => `${option.name}`}
                      />
                   </Box>
                   <StyledTextField
