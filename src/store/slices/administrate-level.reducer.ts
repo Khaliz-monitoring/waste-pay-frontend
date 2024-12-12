@@ -3,7 +3,7 @@ import { createAction, createSelector, createSlice, PayloadAction } from '@redux
 import { Option } from '@/types';
 import { RootState } from '../config';
 import {
-   ChangeSelectedFilterPayload,
+   ChangeAddressPayload,
    FetchAdministrativeLevelActionPayload,
 } from '@/types/administrativeLevel';
 
@@ -81,7 +81,7 @@ export const fetchAdministrateLevel = createAction<FetchAdministrativeLevelActio
    `${name}/fetchAdministrateLevel`
 );
 
-export const updateSelectedFilter = createAction<ChangeSelectedFilterPayload>(
+export const updateSelectedFilter = createAction<ChangeAddressPayload>(
    `${name}/updateValueSelectedFilter`
 );
 

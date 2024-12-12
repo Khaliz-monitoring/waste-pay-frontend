@@ -33,5 +33,5 @@ export type Ward = {
 
 export type Address = {
    ward: Ward;
-   name: string;
+   fullName: string;
 };

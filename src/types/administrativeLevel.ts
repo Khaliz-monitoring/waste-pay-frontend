@@ -5,7 +5,7 @@ export type FetchAdministrativeLevelActionPayload = {
    parentCode: string;
 };
 
-export type ChangeSelectedFilterPayload = {
+export type ChangeAddressPayload = {
    field: EAdministrativeLevel;
    option: any;
 };
