@@ -3,12 +3,13 @@ import { EUserState } from '@/enums/user-state.enum';
 
 export type UserAuth = {
    id: number;
-   firstName: string;
-   lastName: string;
+   firstName?: string;
+   lastName?: string;
    fullName: string;
    role: ERole;
-   phone: string;
+   phoneNumber: string;
    email: string;
+   password?: string;
    avatar: string;
    address: Address;
    state: EUserState;
@@ -34,4 +35,5 @@ export type Ward = {
 export type Address = {
    ward: Ward;
    fullName: string;
+   code: string;
 };

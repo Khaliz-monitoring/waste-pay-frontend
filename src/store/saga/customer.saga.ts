@@ -33,7 +33,7 @@ function mappingTableData(recordList: any[]): UserAuth[] {
          firstName: item.firstname,
          lastName: item.lastname,
          fullName: `${item.firstname} ${item.lastname}`,
-         phone: item.phoneNumber,
+         phoneNumber: item.phoneNumber,
          avatar: item.avatar,
          address: item?.address,
          role: item.role,

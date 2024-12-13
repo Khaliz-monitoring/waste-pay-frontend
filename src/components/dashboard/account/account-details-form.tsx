@@ -65,7 +65,7 @@ export function AccountDetailsForm(): React.JSX.Element {
                   <Grid md={6} xs={12}>
                      <StyledExtenalLabelTextField
                         label={'Số điện thoại'}
-                        value={user?.phone}
+                        value={user?.phoneNumber}
                         disabled
                      />
                   </Grid>

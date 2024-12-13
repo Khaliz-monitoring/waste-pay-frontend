@@ -26,16 +26,16 @@ export function AccountInfo(): React.JSX.Element {
                   <Typography variant="h5">{`${user?.firstName} ${user?.lastName}`}</Typography>
 
                   <Typography color="text.secondary" variant="body2">
-                     {user?.phone}
+                     {user?.phoneNumber}
                   </Typography>
 
                   <Typography color="text.secondary" variant="body2">
                      {user?.email}
                   </Typography>
 
-                  <Typography color="text.secondary" variant="body2">
+                  {/* <Typography color="text.secondary" variant="body2">
                      {user?.address}
-                  </Typography>
+                  </Typography> */}
                </Stack>
             </Stack>
          </CardContent>

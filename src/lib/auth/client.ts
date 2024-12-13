@@ -124,12 +124,13 @@ class AuthClient {
             firstName: data.firstname,
             lastName: data.lastname,
             fullName: data.fullName,
-            phone: data.phoneNumber,
+            phoneNumber: data.phoneNumber,
             avatar: data.avatar,
             address: data.address,
             role: extrackERole(data.role),
             email: data.email,
             state: extractEUserState(data.state.name),
+            id: data.id,
          } as UserAuth;
 
          return { data: userInfo };

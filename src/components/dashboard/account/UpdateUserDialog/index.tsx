@@ -7,6 +7,7 @@ import { EUserState } from '@/enums/user-state.enum';
 import { useUser } from '@/hooks/use-user';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { accountStore } from '@/store/slices';
+import { UserAuth } from '@/types/auth';
 import { checkValidPassword } from '@/utils/checkFormatPassword';
 import { Box, Button, Dialog, styled, TextField, Typography } from '@mui/material';
 import { memo, useEffect, useLayoutEffect, useState } from 'react';
@@ -40,7 +41,9 @@ const StyledTextField = styled(TextField)(() => ({
       top: 10,
    },
    '& .MuiInputLabel-shrink': {
-      transform: 'translate(15px, -18px) scale(0.9)',
+      transform: 'translate(15px, -19px) scale(0.9)',
+      background: 'white',
+      paddingRight: 7,
    },
 }));
 
@@ -70,24 +73,24 @@ const StyledAppAutocomplete = styled(AppAutocomplete)(() => ({
    '& .MuiInputLabel-root': {
       transform: 'translate(14px, 1px) scale(1)',
       position: 'absolute',
-      top: 13,
+      top: 11,
    },
    '& .MuiInputLabel-shrink': {
-      transform: 'translate(15px, -18px) scale(0.9)',
+      transform: 'translate(15px, -20px) scale(0.9)',
+      background: 'white',
+      paddingRight: 7,
    },
 }));
 
 const UpdateUserDialog = () => {
    const { user } = useUser();
+
    const dispatch = useAppDispatch();
    const administrativeLevelFilterOptions = useAppSelector(accountStore.selectFilterOptions);
    const userInfo = useAppSelector(accountStore.selectUserInfo);
 
    const [open, setOpen] = useState(false);
-   // const addressOptions = useAppSelector();
-   const [name, setName] = useState(user?.fullName);
-   const [phoneNumber, setPhoneNumber] = useState(user?.phone);
-   const [newPassword, setNewPassword] = useState('');
+
    const [checkNewPassword, setCheckNewPassword] = useState('');
    const [newPasswordError, setNewPasswordError] = useState(false);
    const [checkNewPasswordError, setCheckNewPasswordError] = useState(false);
@@ -98,26 +101,26 @@ const UpdateUserDialog = () => {
 
    useEffect(() => {
       // check valid password
-      if (!checkValidPassword(newPassword)) {
+      if (userInfo.password && !checkValidPassword(userInfo.password)) {
          if (!newPasswordError) setNewPasswordError(true);
       } else {
          if (newPasswordError) setNewPasswordError(false);
       }
 
       // check confirm password
-      if (checkNewPassword !== newPassword) {
+      if (checkNewPassword !== userInfo.password && userInfo.password) {
          setCheckNewPasswordError(true);
       } else {
          setCheckNewPasswordError(false);
       }
-   }, [newPassword, checkNewPassword]);
+   }, [userInfo?.password, checkNewPassword]);
 
    useEffect(() => {
       // if user have not active the account, open update user dialog
       if (user.state === EUserState.INACTIVE) {
          setOpen(true);
       }
-   });
+   }, [userInfo]);
 
    /**
     * update adjusted user on change Address
@@ -133,11 +136,22 @@ const UpdateUserDialog = () => {
       );
    };
 
+   const handleChangeUserInfo = (field: string, value: string) => {
+      const userTemp: UserAuth = { ...userInfo };
+      userTemp[field] = value;
+
+      dispatch(accountStore.actions.setUserInfo(userTemp));
+   };
+
    useLayoutEffect(() => {
       dispatch(accountStore.actions.initUserInfo(user));
 
       dispatch(accountStore.firstFetchAdministrateLevel());
    }, []);
+
+   const handleSubmitUpdate = () => {
+      dispatch(accountStore.submitUpdateUserInfo());
+   };
 
    return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
@@ -148,23 +162,31 @@ const UpdateUserDialog = () => {
             <Box>
                <Box sx={{ display: 'flex', gap: 2 }}>
                   <Box sx={{ width: '70%' }}>
-                     <ExtenalLabelTextField label={'Họ tên'} value={name} />
+                     <ExtenalLabelTextField
+                        label={'Họ tên'}
+                        value={userInfo.fullName}
+                        onChange={(e) => handleChangeUserInfo('fullName', e.target.value)}
+                     />
                   </Box>
 
                   <Box sx={{ flexGrow: 1 }}>
-                     <ExtenalLabelTextField label={'Số điện thoại'} value={phoneNumber} />
+                     <ExtenalLabelTextField
+                        label={'Số điện thoại'}
+                        value={userInfo.phoneNumber}
+                        onChange={(e) => handleChangeUserInfo('phone', e.target.value)}
+                     />
                   </Box>
                </Box>
 
-               {user.state === EUserState.INACTIVE && (
+               {user?.state === EUserState.INACTIVE && (
                   <Box sx={{ display: 'flex', gap: 2, my: 2 }}>
                      <Box sx={{ width: '50%' }}>
                         <ExtenalLabelTextField
                            label={'Mật khẩu mới'}
                            type="password"
-                           value={newPassword}
+                           value={userInfo.password}
                            error={newPasswordError}
-                           onChange={(e) => setNewPassword(e.target.value)}
+                           onChange={(e) => handleChangeUserInfo('password', e.target.value)}
                            helperText={
                               newPasswordError
                                  ? 'Tối thiểu tám ký tự, ít nhất một chữ cái và một số'
@@ -236,7 +258,9 @@ const UpdateUserDialog = () => {
                   <StyledTextField
                      value={userInfo?.address?.fullName}
                      onChange={(option) =>
-                        handleChangeAddress('specificalAddress', option.target.value)
+                        handleChangeAddress('SPECCIFICAL_ADDRESS', {
+                           fullName: option.target.value,
+                        })
                      }
                      label="Số nhà"
                      sx={{ mt: 2, width: '100%' }}
@@ -245,7 +269,9 @@ const UpdateUserDialog = () => {
                </Box>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-               <Button variant="outlined">Cập nhập</Button>
+               <Button variant="outlined" onClick={handleSubmitUpdate}>
+                  Cập nhập
+               </Button>
             </Box>
          </Box>
       </Dialog>

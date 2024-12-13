@@ -25,6 +25,7 @@ export type AddressSelectedFilter = {
    DISTRICT: AddressSelectedFilterItem;
    PROVINCE: AddressSelectedFilterItem;
    WARD: AddressSelectedFilterItem;
+   SPECCIFICAL_ADDRESS: AddressSelectedFilterItem;
 };
 
 interface AccountSilce {
@@ -32,19 +33,9 @@ interface AccountSilce {
    userInfo: UserAuth;
 }
 
-export const initialState: AccountSilce = {
-   filterOptions: {
-      address: {
-         DISTRICT: [],
-         PROVINCE: [],
-         WARD: [],
-      },
-   },
-   userInfo: null,
-};
-
 export const defaultAddress: Address = {
    fullName: null,
+   code: null,
    ward: {
       code: null,
       fullName: null,
@@ -57,6 +48,29 @@ export const defaultAddress: Address = {
          },
       },
    },
+};
+
+export const defaultUserInfo: UserAuth = {
+   id: null,
+   fullName: null,
+   role: null,
+   phoneNumber: null,
+   email: null,
+   password: null,
+   avatar: null,
+   address: defaultAddress,
+   state: null,
+};
+
+export const initialState: AccountSilce = {
+   filterOptions: {
+      address: {
+         DISTRICT: [],
+         PROVINCE: [],
+         WARD: [],
+      },
+   },
+   userInfo: defaultUserInfo,
 };
 
 const commonSlice = createSlice({
@@ -74,18 +88,18 @@ const commonSlice = createSlice({
        * init user info
        */
       initUserInfo(state, { payload }: PayloadAction<UserAuth>) {
-         if (!payload.address) {
-            payload = {
-               ...payload,
-               address: defaultAddress,
-            };
-         }
+         console.log('reducer', payload);
+
+         payload = {
+            ...payload,
+            address: payload.address || defaultAddress,
+            state: null,
+         };
 
          state.userInfo = payload;
       },
 
       setAdministrativeLevel(state, { payload }: PayloadAction<Partial<AddressSelectedFilter>>) {
-         console.log('payload update adminis', payload);
          if (payload.PROVINCE) {
             // clear district data
             state.userInfo.address.ward.district.code = null;
@@ -128,7 +142,16 @@ const commonSlice = createSlice({
                ...state.userInfo.address.ward,
                ...payload.WARD,
             };
+         } else {
+            //SPECCIFICAL_ADDRESS
+            console.log('payload update adminis', payload.SPECCIFICAL_ADDRESS.fullName, payload);
+
+            state.userInfo.address.fullName = payload.SPECCIFICAL_ADDRESS.fullName;
          }
+      },
+
+      setUserInfo(state, { payload }: PayloadAction<UserAuth>) {
+         state.userInfo = { ...state.userInfo, ...payload };
       },
    },
 });
@@ -139,6 +162,8 @@ export const changeAddressActions = createAction<ChangeAddressPayload>(
 );
 
 export const firstFetchAdministrateLevel = createAction(`${name}/firstFetchAdministrateLevel`);
+
+export const submitUpdateUserInfo = createAction(`${name}/submitUpdateUserInfo`);
 
 // Selectors
 export const selectState = (state: RootState) => state[name];
