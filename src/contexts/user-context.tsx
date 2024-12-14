@@ -57,7 +57,7 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
          }
 
          setState((prev) => ({ ...prev, user: data ?? null, error: null, isLoading: false }));
-         dispatch(accountStore.actions.setUserInfo(data));
+         if (data) dispatch(accountStore.actions.setUserInfo(data));
          // dispatch(authStore.actions.setCurrentUser(data));
       } catch (err) {
          logger.error(err);
