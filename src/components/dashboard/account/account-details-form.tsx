@@ -73,7 +73,7 @@ export function AccountDetailsForm(): React.JSX.Element {
                   <Grid md={12} xs={12}>
                      <StyledExtenalLabelTextField
                         label={'Địa chỉ'}
-                        value={user?.address}
+                        value={`${user?.address?.fullName}, ${user?.address?.ward?.fullName}, ${user?.address?.ward?.district?.fullName}, ${user?.address?.ward?.district?.province?.fullName}`}
                         disabled
                      />
                   </Grid>

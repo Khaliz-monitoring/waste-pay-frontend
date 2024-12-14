@@ -2,9 +2,12 @@ import administrativeLevelApi from '@/api/address.api';
 import { EAdministrativeLevel } from '@/enums/administrativeLevel.enum';
 import { ChangeAddressPayload } from '@/types/administrativeLevel';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, getContext, put, select, takeEvery } from 'redux-saga/effects';
 import { accountStore } from '../slices';
 import accountApi from '@/api/account.api';
+import { authClient } from '@/lib/auth/client';
+import { UserContext } from '@/contexts/user-context';
+import React from 'react';
 
 function* fistFetchAdministrativeLevelData() {
    try {
@@ -48,7 +51,7 @@ function* submitUpdateUserInfo() {
       const { userInfo } = yield all({ userInfo: select(accountStore.selectUserInfo) });
       const { data } = yield call(accountApi.updateUserInfo, userInfo);
 
-      console.log(data);
+      yield put(accountStore.actions.setOpenUpdateUserDialog(false));
    } catch (error) {
       console.log(error);
    }

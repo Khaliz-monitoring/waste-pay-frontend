@@ -23,19 +23,37 @@ export function AccountInfo(): React.JSX.Element {
                   <Avatar src={getAvatar(user?.avatar)} sx={{ height: '80px', width: '80px' }} />
                </div>
                <Stack spacing={1} sx={{ textAlign: 'center' }}>
-                  <Typography variant="h5">{`${user?.firstName} ${user?.lastName}`}</Typography>
+                  <Typography variant="h5">{user?.fullName}</Typography>
 
                   <Typography color="text.secondary" variant="body2">
                      {user?.phoneNumber}
                   </Typography>
 
                   <Typography color="text.secondary" variant="body2">
-                     {user?.email}
+                     {user?.email || ''}
                   </Typography>
 
-                  {/* <Typography color="text.secondary" variant="body2">
-                     {user?.address}
-                  </Typography> */}
+                  <Typography
+                     color="text.secondary"
+                     variant="body2"
+                     sx={{
+                        display: 'flex',
+                        flexWrap: 'wrap',
+                        justifyContent: 'center',
+                        gap: '3px',
+                     }}
+                  >
+                     <Typography color="text.secondary" variant="body2">
+                        {user?.address?.fullName},
+                     </Typography>
+                     <Typography color="text.secondary" variant="body2">
+                        {user?.address?.ward?.fullName},
+                     </Typography>
+                     <Typography color="text.secondary" variant="body2">
+                        {user?.address?.ward?.district?.fullName},
+                     </Typography>
+                     {user?.address?.ward?.district?.province?.fullName}
+                  </Typography>
                </Stack>
             </Stack>
          </CardContent>

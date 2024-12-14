@@ -3,7 +3,13 @@ import createSagaMiddleware from 'redux-saga';
 import rootReducers from './slices/root-reducer.reducer';
 import rootSaga from './saga/root.saga';
 
-const sagaMiddleware = createSagaMiddleware();
+import { UserContext } from '@/contexts/user-context';
+
+const sagaMiddleware = createSagaMiddleware({
+   context: {
+      userContext: UserContext,
+   },
+});
 
 export const store = configureStore({
    reducer: rootReducers,

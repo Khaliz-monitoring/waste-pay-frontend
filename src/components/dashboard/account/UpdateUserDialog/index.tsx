@@ -89,14 +89,15 @@ const UpdateUserDialog = () => {
    const administrativeLevelFilterOptions = useAppSelector(accountStore.selectFilterOptions);
    const userInfo = useAppSelector(accountStore.selectUserInfo);
 
-   const [open, setOpen] = useState(false);
+   const open = useAppSelector(accountStore.selectOpenUpdateUserInfoDialog);
 
    const [checkNewPassword, setCheckNewPassword] = useState('');
    const [newPasswordError, setNewPasswordError] = useState(false);
    const [checkNewPasswordError, setCheckNewPasswordError] = useState(false);
 
    const handleClose = () => {
-      if (user.state !== EUserState.INACTIVE) setOpen(false);
+      if (user.state !== EUserState.INACTIVE)
+         dispatch(accountStore.actions.setOpenUpdateUserDialog(false));
    };
 
    useEffect(() => {
@@ -114,13 +115,6 @@ const UpdateUserDialog = () => {
          setCheckNewPasswordError(false);
       }
    }, [userInfo?.password, checkNewPassword]);
-
-   useEffect(() => {
-      // if user have not active the account, open update user dialog
-      if (user.state === EUserState.INACTIVE) {
-         setOpen(true);
-      }
-   }, [userInfo]);
 
    /**
     * update adjusted user on change Address
@@ -140,17 +134,27 @@ const UpdateUserDialog = () => {
       const userTemp: UserAuth = { ...userInfo };
       userTemp[field] = value;
 
-      dispatch(accountStore.actions.setUserInfo(userTemp));
+      dispatch(accountStore.actions.setUpdatedUserInfo(userTemp));
    };
 
    useLayoutEffect(() => {
-      dispatch(accountStore.actions.initUserInfo(user));
+      dispatch(accountStore.actions.initUpdatedUserInfo(user));
 
       dispatch(accountStore.firstFetchAdministrateLevel());
-   }, []);
+   }, [user]);
 
    const handleSubmitUpdate = () => {
-      dispatch(accountStore.submitUpdateUserInfo());
+      if (
+         userInfo.fullName &&
+         userInfo.phoneNumber &&
+         userInfo.password &&
+         !newPasswordError &&
+         !checkNewPasswordError &&
+         userInfo.address.ward.fullName &&
+         userInfo.address.fullName
+      ) {
+         dispatch(accountStore.submitUpdateUserInfo());
+      }
    };
 
    return (
@@ -262,14 +266,29 @@ const UpdateUserDialog = () => {
                            fullName: option.target.value,
                         })
                      }
-                     label="Số nhà"
+                     label="Địa chỉ cụ thể"
                      sx={{ mt: 2, width: '100%' }}
                      disabled={!userInfo?.address?.ward?.fullName}
+                     placeholder="Xóm 2, Thôn An Bình"
                   />
                </Box>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
-               <Button variant="outlined" onClick={handleSubmitUpdate}>
+               <Button
+                  variant="outlined"
+                  onClick={handleSubmitUpdate}
+                  disabled={
+                     !(
+                        userInfo.fullName &&
+                        userInfo.phoneNumber &&
+                        userInfo.password &&
+                        !newPasswordError &&
+                        !checkNewPasswordError &&
+                        userInfo.address.ward.fullName &&
+                        userInfo.address.fullName
+                     )
+                  }
+               >
                   Cập nhập
                </Button>
             </Box>

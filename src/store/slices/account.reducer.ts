@@ -4,6 +4,7 @@ import { Option } from '@/types';
 import { Address, UserAuth } from '@/types/auth';
 import { RootState } from '../config';
 import { ChangeAddressPayload } from '@/types/administrativeLevel';
+import { EUserState } from '@/enums/user-state.enum';
 
 export const name = 'account';
 export const resetState = createAction(`${name}/'RESET_STATE'}`);
@@ -30,7 +31,9 @@ export type AddressSelectedFilter = {
 
 interface AccountSilce {
    filterOptions: FilterOptions;
+   updatedUserInfo: UserAuth;
    userInfo: UserAuth;
+   openUpdateUserInfoDialog: boolean;
 }
 
 export const defaultAddress: Address = {
@@ -71,6 +74,8 @@ export const initialState: AccountSilce = {
       },
    },
    userInfo: defaultUserInfo,
+   updatedUserInfo: defaultUserInfo,
+   openUpdateUserInfoDialog: false,
 };
 
 const commonSlice = createSlice({
@@ -84,11 +89,17 @@ const commonSlice = createSlice({
          };
       },
 
+      setUserInfo(state, { payload }: PayloadAction<UserAuth>) {
+         state.updatedUserInfo = payload;
+      },
+
       /**
-       * init user info
+       * init updated user info
        */
-      initUserInfo(state, { payload }: PayloadAction<UserAuth>) {
-         console.log('reducer', payload);
+      initUpdatedUserInfo(state, { payload }: PayloadAction<UserAuth>) {
+         if (payload.state === EUserState.INACTIVE) {
+            state.openUpdateUserInfoDialog = true;
+         }
 
          payload = {
             ...payload,
@@ -96,62 +107,65 @@ const commonSlice = createSlice({
             state: null,
          };
 
-         state.userInfo = payload;
+         state.updatedUserInfo = payload;
       },
 
       setAdministrativeLevel(state, { payload }: PayloadAction<Partial<AddressSelectedFilter>>) {
          if (payload.PROVINCE) {
             // clear district data
-            state.userInfo.address.ward.district.code = null;
-            state.userInfo.address.ward.district.fullName = null;
+            state.updatedUserInfo.address.ward.district.code = null;
+            state.updatedUserInfo.address.ward.district.fullName = null;
             state.filterOptions.address.DISTRICT = [];
 
             // clear ward
-            state.userInfo.address.ward.code = null;
-            state.userInfo.address.ward.fullName = null;
+            state.updatedUserInfo.address.ward.code = null;
+            state.updatedUserInfo.address.ward.fullName = null;
             state.filterOptions.address.WARD = [];
 
             // clear specific address
-            state.userInfo.address.fullName = null;
+            state.updatedUserInfo.address.fullName = null;
 
             // update new administrative
-            state.userInfo.address.ward.district.province = {
-               ...state.userInfo.address.ward.district.province,
+            state.updatedUserInfo.address.ward.district.province = {
+               ...state.updatedUserInfo.address.ward.district.province,
                ...payload.PROVINCE,
             };
          } else if (payload.DISTRICT) {
             // clear ward
-            state.userInfo.address.ward.code = null;
-            state.userInfo.address.ward.fullName = null;
+            state.updatedUserInfo.address.ward.code = null;
+            state.updatedUserInfo.address.ward.fullName = null;
             state.filterOptions.address.WARD = [];
 
             // clear specific address
-            state.userInfo.address.fullName = null;
+            state.updatedUserInfo.address.fullName = null;
 
             // update new administrative
-            state.userInfo.address.ward.district = {
-               ...state.userInfo.address.ward.district,
+            state.updatedUserInfo.address.ward.district = {
+               ...state.updatedUserInfo.address.ward.district,
                ...payload.DISTRICT,
             };
          } else if (payload.WARD) {
             // clear specific address
-            state.userInfo.address.fullName = null;
+            state.updatedUserInfo.address.fullName = null;
 
             // update new administrative
-            state.userInfo.address.ward = {
-               ...state.userInfo.address.ward,
+            state.updatedUserInfo.address.ward = {
+               ...state.updatedUserInfo.address.ward,
                ...payload.WARD,
             };
          } else {
             //SPECCIFICAL_ADDRESS
-            console.log('payload update adminis', payload.SPECCIFICAL_ADDRESS.fullName, payload);
 
-            state.userInfo.address.fullName = payload.SPECCIFICAL_ADDRESS.fullName;
+            state.updatedUserInfo.address.fullName = payload.SPECCIFICAL_ADDRESS.fullName;
          }
       },
 
-      setUserInfo(state, { payload }: PayloadAction<UserAuth>) {
-         state.userInfo = { ...state.userInfo, ...payload };
+      setUpdatedUserInfo(state, { payload }: PayloadAction<UserAuth>) {
+         state.updatedUserInfo = { ...state.updatedUserInfo, ...payload };
+      },
+
+      setOpenUpdateUserDialog(state, { payload }: PayloadAction<boolean>) {
+         state.openUpdateUserInfoDialog = payload;
       },
    },
 });
@@ -170,11 +184,16 @@ export const selectState = (state: RootState) => state[name];
 
 export const selectFilterOptions = createSelector(selectState, (state) => state.filterOptions);
 
-export const selectUserInfo = createSelector(selectState, (state) => state.userInfo);
+export const selectUserInfo = createSelector(selectState, (state) => state.updatedUserInfo);
 
 export const selectAddress = createSelector(
    selectState,
-   (state): Address => state.userInfo.address
+   (state): Address => state.updatedUserInfo.address
+);
+
+export const selectOpenUpdateUserInfoDialog = createSelector(
+   selectState,
+   (state) => state.openUpdateUserInfoDialog
 );
 
 export const { actions } = commonSlice;
