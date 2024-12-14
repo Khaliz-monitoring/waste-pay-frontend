@@ -16,6 +16,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useUser } from '@/hooks/use-user';
 import ExtenalLabelTextField from '@/components/common/ExtenalLabelTextField';
 import { styled } from '@mui/material';
+import { useAppSelector } from '@/store/hooks';
+import { accountStore } from '@/store/slices';
 
 const states = [
    { value: 'alabama', label: 'Alabama' },
@@ -32,7 +34,7 @@ const StyledExtenalLabelTextField = styled(ExtenalLabelTextField)(() => ({
 }));
 
 export function AccountDetailsForm(): React.JSX.Element {
-   const { user } = useUser();
+   const user = useAppSelector(accountStore.selectUserInfo);
 
    const [openUpdateUser, setOpenUpdateUser] = React.useState(false);
 

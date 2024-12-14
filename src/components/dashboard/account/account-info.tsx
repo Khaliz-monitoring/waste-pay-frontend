@@ -1,6 +1,8 @@
 'use client';
 
-import * as React from 'react';
+import { useAppSelector } from '@/store/hooks';
+import { accountStore } from '@/store/slices';
+import { getAvatar } from '@/utils/get-avatar.utils';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -9,11 +11,10 @@ import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useUser } from '@/hooks/use-user';
-import { getAvatar } from '@/utils/get-avatar.utils';
+import * as React from 'react';
 
 export function AccountInfo(): React.JSX.Element {
-   const { user } = useUser();
+   const user = useAppSelector(accountStore.selectUserInfo);
 
    return (
       <Card>

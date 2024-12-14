@@ -16,6 +16,8 @@ import { paths } from '@/paths';
 import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/default-logger';
 import { useUser } from '@/hooks/use-user';
+import { useAppSelector } from '@/store/hooks';
+import { accountStore } from '@/store/slices';
 
 export interface UserPopoverProps {
    anchorEl: Element | null;
@@ -24,7 +26,9 @@ export interface UserPopoverProps {
 }
 
 export function UserPopover({ anchorEl, onClose, open }: UserPopoverProps): React.JSX.Element {
-   const { checkSession, user } = useUser();
+   const { checkSession } = useUser();
+
+   const user = useAppSelector(accountStore.selectUserInfo);
 
    const router = useRouter();
 
