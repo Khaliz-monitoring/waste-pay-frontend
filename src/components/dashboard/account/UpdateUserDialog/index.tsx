@@ -4,7 +4,6 @@ import AppAutocomplete from '@/components/Autocomplete';
 import ExtenalLabelTextField from '@/components/common/ExtenalLabelTextField';
 import { extractEAdministrativeLevel } from '@/enums/administrativeLevel.enum';
 import { EUserState } from '@/enums/user-state.enum';
-import { useUser } from '@/hooks/use-user';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { accountStore } from '@/store/slices';
 import { UserAuth } from '@/types/auth';
@@ -83,11 +82,11 @@ const StyledAppAutocomplete = styled(AppAutocomplete)(() => ({
 }));
 
 const UpdateUserDialog = () => {
-   const { user } = useUser();
-
    const dispatch = useAppDispatch();
    const administrativeLevelFilterOptions = useAppSelector(accountStore.selectFilterOptions);
-   const userInfo = useAppSelector(accountStore.selectUserInfo);
+   const updatedUserInfo = useAppSelector(accountStore.selectUpdatedUserInfo);
+
+   const user = useAppSelector(accountStore.selectUserInfo);
 
    const open = useAppSelector(accountStore.selectOpenUpdateUserInfoDialog);
 
@@ -96,25 +95,24 @@ const UpdateUserDialog = () => {
    const [checkNewPasswordError, setCheckNewPasswordError] = useState(false);
 
    const handleClose = () => {
-      if (user.state !== EUserState.INACTIVE)
-         dispatch(accountStore.actions.setOpenUpdateUserDialog(false));
+      dispatch(accountStore.actions.setOpenUpdateUserDialog(false));
    };
 
    useEffect(() => {
       // check valid password
-      if (userInfo.password && !checkValidPassword(userInfo.password)) {
+      if (updatedUserInfo.password && !checkValidPassword(updatedUserInfo.password)) {
          if (!newPasswordError) setNewPasswordError(true);
       } else {
          if (newPasswordError) setNewPasswordError(false);
       }
 
       // check confirm password
-      if (checkNewPassword !== userInfo.password && userInfo.password) {
+      if (checkNewPassword !== updatedUserInfo.password && updatedUserInfo.password) {
          setCheckNewPasswordError(true);
       } else {
          setCheckNewPasswordError(false);
       }
-   }, [userInfo?.password, checkNewPassword]);
+   }, [updatedUserInfo?.password, checkNewPassword]);
 
    /**
     * update adjusted user on change Address
@@ -131,31 +129,31 @@ const UpdateUserDialog = () => {
    };
 
    const handleChangeUserInfo = (field: string, value: string) => {
-      const userTemp: UserAuth = { ...userInfo };
+      const userTemp: UserAuth = { ...updatedUserInfo };
       userTemp[field] = value;
 
       dispatch(accountStore.actions.setUpdatedUserInfo(userTemp));
    };
 
    useLayoutEffect(() => {
-      dispatch(accountStore.actions.initUpdatedUserInfo(user));
-
       dispatch(accountStore.firstFetchAdministrateLevel());
-   }, [user]);
+   }, []);
 
    const handleSubmitUpdate = () => {
       if (
-         userInfo.fullName &&
-         userInfo.phoneNumber &&
-         userInfo.password &&
+         updatedUserInfo.fullName &&
+         updatedUserInfo.phoneNumber &&
+         updatedUserInfo.password &&
          !newPasswordError &&
          !checkNewPasswordError &&
-         userInfo.address.ward.fullName &&
-         userInfo.address.fullName
+         updatedUserInfo.address.ward.fullName &&
+         updatedUserInfo.address.fullName
       ) {
          dispatch(accountStore.submitUpdateUserInfo());
       }
    };
+
+   console.log('render');
 
    return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
@@ -168,7 +166,7 @@ const UpdateUserDialog = () => {
                   <Box sx={{ width: '70%' }}>
                      <ExtenalLabelTextField
                         label={'Họ tên'}
-                        value={userInfo.fullName}
+                        value={updatedUserInfo.fullName}
                         onChange={(e) => handleChangeUserInfo('fullName', e.target.value)}
                      />
                   </Box>
@@ -176,7 +174,7 @@ const UpdateUserDialog = () => {
                   <Box sx={{ flexGrow: 1 }}>
                      <ExtenalLabelTextField
                         label={'Số điện thoại'}
-                        value={userInfo.phoneNumber}
+                        value={updatedUserInfo.phoneNumber}
                         onChange={(e) => handleChangeUserInfo('phone', e.target.value)}
                      />
                   </Box>
@@ -188,7 +186,7 @@ const UpdateUserDialog = () => {
                         <ExtenalLabelTextField
                            label={'Mật khẩu mới'}
                            type="password"
-                           value={userInfo.password}
+                           value={updatedUserInfo.password}
                            error={newPasswordError}
                            onChange={(e) => handleChangeUserInfo('password', e.target.value)}
                            helperText={
@@ -225,7 +223,7 @@ const UpdateUserDialog = () => {
                   </Typography>
                   <Box sx={{ display: 'flex', width: '100%', gap: 1 }}>
                      <StyledAppAutocomplete
-                        value={userInfo?.address?.ward?.district?.province?.fullName}
+                        value={updatedUserInfo?.address?.ward?.district?.province?.fullName}
                         onChange={(e, option) => handleChangeAddress('PROVINCE', option)}
                         options={administrativeLevelFilterOptions.address.PROVINCE}
                         label="Tỉnh / Thành phố"
@@ -236,31 +234,31 @@ const UpdateUserDialog = () => {
                      />
 
                      <StyledAppAutocomplete
-                        value={userInfo?.address?.ward?.district?.fullName}
+                        value={updatedUserInfo?.address?.ward?.district?.fullName}
                         onChange={(e, option) => handleChangeAddress('DISTRICT', option)}
                         options={administrativeLevelFilterOptions.address.DISTRICT}
                         label="Quận / Huyện"
                         primaryKeyOption="fullName"
                         sx={{ flexGrow: 1 }}
-                        disabled={!userInfo?.address?.ward?.district?.province?.fullName}
+                        disabled={!updatedUserInfo?.address?.ward?.district?.province?.fullName}
                         renderOption={(prop, option) => `${option.fullName}`}
                         getOptionLabel={(option) => `${option.fullName}`}
                      />
 
                      <StyledAppAutocomplete
-                        value={userInfo?.address?.ward?.fullName}
+                        value={updatedUserInfo?.address?.ward?.fullName}
                         onChange={(e, option) => handleChangeAddress('WARD', option)}
                         options={administrativeLevelFilterOptions.address.WARD}
                         label="Xã / Thị Trấn"
                         primaryKeyOption="fullName"
-                        disabled={!userInfo?.address?.ward?.district?.fullName}
+                        disabled={!updatedUserInfo?.address?.ward?.district?.fullName}
                         sx={{ flexGrow: 1 }}
                         renderOption={(prop, option) => `${option.fullName}`}
                         getOptionLabel={(option) => `${option.fullName}`}
                      />
                   </Box>
                   <StyledTextField
-                     value={userInfo?.address?.fullName}
+                     value={updatedUserInfo?.address?.fullName}
                      onChange={(option) =>
                         handleChangeAddress('SPECCIFICAL_ADDRESS', {
                            fullName: option.target.value,
@@ -268,7 +266,7 @@ const UpdateUserDialog = () => {
                      }
                      label="Địa chỉ cụ thể"
                      sx={{ mt: 2, width: '100%' }}
-                     disabled={!userInfo?.address?.ward?.fullName}
+                     disabled={!updatedUserInfo?.address?.ward?.fullName}
                      placeholder="Xóm 2, Thôn An Bình"
                   />
                </Box>
@@ -279,13 +277,13 @@ const UpdateUserDialog = () => {
                   onClick={handleSubmitUpdate}
                   disabled={
                      !(
-                        userInfo.fullName &&
-                        userInfo.phoneNumber &&
-                        userInfo.password &&
+                        updatedUserInfo.fullName &&
+                        updatedUserInfo.phoneNumber &&
+                        updatedUserInfo.password &&
                         !newPasswordError &&
                         !checkNewPasswordError &&
-                        userInfo.address.ward.fullName &&
-                        userInfo.address.fullName
+                        updatedUserInfo.address.ward.fullName &&
+                        updatedUserInfo.address.fullName
                      )
                   }
                >

@@ -90,24 +90,33 @@ const commonSlice = createSlice({
       },
 
       setUserInfo(state, { payload }: PayloadAction<UserAuth>) {
-         state.updatedUserInfo = payload;
+         state.userInfo = payload;
+
+         // if user state is INACTIVE -> open update user dialog
+         if (state.userInfo.state === EUserState.INACTIVE) {
+            state.openUpdateUserInfoDialog = true;
+
+            state.updatedUserInfo = {
+               ...payload,
+               address: payload.address || defaultAddress,
+               state: null,
+            };
+         }
       },
 
       /**
        * init updated user info
        */
-      initUpdatedUserInfo(state, { payload }: PayloadAction<UserAuth>) {
-         if (payload.state === EUserState.INACTIVE) {
+      initUpdatedUserInfo(state) {
+         if (state.userInfo.state === EUserState.INACTIVE) {
             state.openUpdateUserInfoDialog = true;
          }
 
-         payload = {
-            ...payload,
-            address: payload.address || defaultAddress,
+         state.updatedUserInfo = {
+            ...state.userInfo,
+            address: state.userInfo.address || defaultAddress,
             state: null,
          };
-
-         state.updatedUserInfo = payload;
       },
 
       setAdministrativeLevel(state, { payload }: PayloadAction<Partial<AddressSelectedFilter>>) {
@@ -165,6 +174,8 @@ const commonSlice = createSlice({
       },
 
       setOpenUpdateUserDialog(state, { payload }: PayloadAction<boolean>) {
+         if (payload === false && state.userInfo.state === EUserState.INACTIVE) return;
+
          state.openUpdateUserInfoDialog = payload;
       },
    },
@@ -184,7 +195,9 @@ export const selectState = (state: RootState) => state[name];
 
 export const selectFilterOptions = createSelector(selectState, (state) => state.filterOptions);
 
-export const selectUserInfo = createSelector(selectState, (state) => state.updatedUserInfo);
+export const selectUpdatedUserInfo = createSelector(selectState, (state) => state.updatedUserInfo);
+
+export const selectUserInfo = createSelector(selectState, (state) => state.userInfo);
 
 export const selectAddress = createSelector(
    selectState,

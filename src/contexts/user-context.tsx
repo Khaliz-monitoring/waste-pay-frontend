@@ -3,6 +3,8 @@
 import { authClient } from '@/lib/auth/client';
 import { logger } from '@/lib/default-logger';
 import { LOGIN } from '@/paths/frontend';
+import { useAppDispatch } from '@/store/hooks';
+import { accountStore } from '@/store/slices';
 import { UserAuth } from '@/types/auth';
 import { usePathname, useRouter } from 'next/navigation'; // Correct for App Router
 import * as React from 'react';
@@ -33,6 +35,7 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
 
    const router = useRouter(); // Use the App Router's navigation API
    const pathname = usePathname();
+   const dispatch = useAppDispatch();
 
    const checkSession = React.useCallback(async (): Promise<void> => {
       try {
@@ -54,7 +57,7 @@ export function UserProvider({ children }: UserProviderProps): React.JSX.Element
          }
 
          setState((prev) => ({ ...prev, user: data ?? null, error: null, isLoading: false }));
-
+         dispatch(accountStore.actions.setUserInfo(data));
          // dispatch(authStore.actions.setCurrentUser(data));
       } catch (err) {
          logger.error(err);

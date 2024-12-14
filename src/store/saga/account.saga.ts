@@ -8,6 +8,9 @@ import accountApi from '@/api/account.api';
 import { authClient } from '@/lib/auth/client';
 import { UserContext } from '@/contexts/user-context';
 import React from 'react';
+import { UserAuth } from '@/types/auth';
+import { extrackERole } from '@/enums/role.enum';
+import { extractEUserState } from '@/enums/user-state.enum';
 
 function* fistFetchAdministrativeLevelData() {
    try {
@@ -48,8 +51,25 @@ function* changeAdministrativeLevel({ payload }: PayloadAction<ChangeAddressPayl
 
 function* submitUpdateUserInfo() {
    try {
-      const { userInfo } = yield all({ userInfo: select(accountStore.selectUserInfo) });
-      const { data } = yield call(accountApi.updateUserInfo, userInfo);
+      const { updatedUserInfo } = yield all({
+         updatedUserInfo: select(accountStore.selectUpdatedUserInfo),
+      });
+      const { data } = yield call(accountApi.updateUserInfo, updatedUserInfo);
+
+      const user = {
+         firstName: data.firstname,
+         lastName: data.lastname,
+         fullName: data.fullName,
+         phoneNumber: data.phoneNumber,
+         avatar: data.avatar,
+         address: data.address,
+         role: extrackERole(data.role),
+         email: data.email,
+         state: extractEUserState(data.state.name),
+         id: data.id,
+      } as UserAuth;
+
+      yield put(accountStore.actions.setUserInfo(user));
 
       yield put(accountStore.actions.setOpenUpdateUserDialog(false));
    } catch (error) {
