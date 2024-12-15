@@ -23,7 +23,7 @@ import { authClient } from '@/lib/auth/client';
 import { useUser } from '@/hooks/use-user';
 
 const schema = zod.object({
-   email: zod.string().min(1, { message: 'Email is required' }).email(),
+   email: zod.string().min(1, { message: 'Email is required' }),
    password: zod.string().min(1, { message: 'Password is required' }),
 });
 
@@ -86,10 +86,7 @@ export function SignInForm(): React.JSX.Element {
                   render={({ field }) => (
                      <FormControl error={Boolean(errors.email)}>
                         <InputLabel>Phone number</InputLabel>
-                        <OutlinedInput {...field} label="Email address" type="email" />
-                        {errors.email ? (
-                           <FormHelperText>{errors.email.message}</FormHelperText>
-                        ) : null}
+                        <OutlinedInput {...field} label="Email address" />
                      </FormControl>
                   )}
                />

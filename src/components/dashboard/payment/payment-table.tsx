@@ -191,7 +191,7 @@ const PaymentTable = () => {
          headerName: 'Phương thức thanh toán',
          ...centerColumn,
          renderCell(params) {
-            return <span>{params.row.isPaid && params.row.billMethod}</span>;
+            return <span>{params.row.isPaid && params.row.paymentGateway}</span>;
          },
       },
       {

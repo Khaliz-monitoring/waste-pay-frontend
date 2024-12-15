@@ -40,11 +40,11 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                   {params.row?.avatar ? (
                      <Avatar src={getAvatar(params.row.avatar)} />
                   ) : (
-                     <Avatar {...stringAvatar(params.row?.lastName)} />
+                     <Avatar {...stringAvatar(params.row?.fullName)} />
                   )}
                   <span
                      style={{ fontWeight: 500 }}
-                  >{`${params.row?.firstName ? params.row?.firstName : ''} ${params.row?.lastName ? params.row?.lastName : ''}`}</span>
+                  >{`${params.row?.fullName ? params.row?.fullName : ''}`}</span>
                </Box>
             );
          },
@@ -61,9 +61,18 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          minWidth: 100,
          headerName: 'Địa Chỉ',
          ...centerHeaderColumn,
+         renderCell(params) {
+            return (
+               <span>
+                  {params.row?.address
+                     ? `${params.row?.address?.fullName}, ${params.row?.address?.ward?.fullName}, ${params.row?.address?.ward?.district?.fullName}, ${params.row?.address?.ward?.district?.province?.fullName}`
+                     : ''}
+               </span>
+            );
+         },
       },
       {
-         field: 'phone',
+         field: 'phoneNumber',
          flex: 0.3,
          minWidth: 100,
          headerName: 'Phone',
