@@ -5,21 +5,13 @@ import {
    SelectedFilter,
    SetLoadingTableProps,
    SetUserListProps,
-   TableState,
 } from '@/types/mange-user';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../config';
+import { defaultTableState } from '@/default-values/table-state';
 
 export const name = 'manage-user';
-
-const defaultTableState: TableState = {
-   rows: [],
-   pageSize: 10,
-   pageNo: 1,
-   loading: false,
-   totalItems: 0,
-};
 
 const selectedFilter: SelectedFilter = {
    search: null,

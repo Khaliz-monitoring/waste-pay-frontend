@@ -37,3 +37,11 @@ export const formatNumberTwoPercentDigit = (num: number) => {
       maximumFractionDigits: 2,
    });
 };
+
+export const formatDateTime = (dateTime: string) => {
+   if (!dateTime) return '';
+
+   var reTime = /(\d+\-\d+\-\d+)\D(\d+\:\d+\:\d+).+/;
+   var newTime = dateTime.replace(reTime, '$2  $1');
+   return newTime;
+};

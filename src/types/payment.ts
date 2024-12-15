@@ -1,6 +1,8 @@
 export type Payment = {
+   id: number;
    billMonth: string;
    amount: number;
-   billMethod: string;
+   isPaid: boolean;
+   paymentGateway: string;
    paymentTime: string;
 };

@@ -5,14 +5,14 @@ import AppDataTable from '@/components/DataTable/AppDataGridPro';
 import { ERole } from '@/enums/role.enum';
 import { useAppDispatch } from '@/store/hooks';
 import { manageUserStore } from '@/store/slices';
-import { TableState } from '@/types/mange-user';
 import { centerColumn, centerHeaderColumn } from '@/utils/columnProperties';
 import { getAvatar } from '@/utils/get-avatar.utils';
 import { stringAvatar } from '@/utils/string-avatar';
-import { Avatar, Box } from '@mui/material';
+import { Avatar, Box, Grid } from '@mui/material';
 import { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import StatusButton from './StatusButton';
+import { TableState } from '@/types/table-state';
 
 interface UserTableProps {
    role: ERole;
@@ -144,7 +144,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
    };
 
    return (
-      <Box sx={{ height: `calc(100vh - 270px)`, width: '100%' }}>
+      <Grid sx={{ height: `calc(100vh - 270px)`, width: '100%' }}>
          <AppDataTable rows={dataTable?.rows} columns={columns} getRowId={(params) => params.id} />
          <DataTablePagination
             page={dataTable?.pageNo}
@@ -152,9 +152,8 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
             totalItems={dataTable.totalItems}
             onChangePage={handleChangePage}
             onChangePerPage={handleChangePerPage}
-            handleChangePerPage
          />
-      </Box>
+      </Grid>
    );
 };
 

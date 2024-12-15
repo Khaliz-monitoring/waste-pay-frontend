@@ -1,16 +1,5 @@
 import { ERole } from '@/enums/role.enum';
-import { UserAuth } from './auth';
-
-/**
- * table state
- */
-export type TableState = {
-   rows: UserAuth[];
-   pageSize: number;
-   pageNo: number;
-   loading: boolean;
-   totalItems: number;
-};
+import { TableState } from './table-state';
 
 export type SelectedFilter = {
    search: string;

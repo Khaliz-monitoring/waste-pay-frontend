@@ -1,8 +1,9 @@
 import manageUserApi from '@/api/manage-user.api';
 import { ERole } from '@/enums/role.enum';
-import { extractEUserState as extractEUserState } from '@/enums/user-state.enum';
-import { Address, UserAuth } from '@/types/auth';
-import { AddUserProps, TableState } from '@/types/mange-user';
+import { extractEUserState } from '@/enums/user-state.enum';
+import { UserAuth } from '@/types/auth';
+import { AddUserProps } from '@/types/mange-user';
+import { TableState } from '@/types/table-state';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
 import { commonStore, manageUserStore } from '../slices';
