@@ -53,3 +53,8 @@ export type AddUserProps = {
    // email of user you want to add into table
    phoneNumber: string;
 };
+
+export type SetSelectedFilterProps = {
+   role: ERole;
+   selectedFilter: SelectedFilter;
+};

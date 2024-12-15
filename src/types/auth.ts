@@ -13,6 +13,7 @@ export type UserAuth = {
    avatar: string;
    address: Address;
    state: EUserState;
+   amountPayable?: number;
 };
 
 export type Province = {

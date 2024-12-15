@@ -1,13 +1,28 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
+'use client';
+
+import { ERole } from '@/enums/role.enum';
+import { useAppDispatch } from '@/store/hooks';
+import { manageUserStore } from '@/store/slices';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { MagnifyingGlass as MagnifyingGlassIcon } from '@phosphor-icons/react/dist/ssr/MagnifyingGlass';
+import * as React from 'react';
 
-export function CustomersFilters(): React.JSX.Element {
+interface CustomersFilterProps {
+   role: ERole;
+}
+
+const CustomersFilters: React.FC<CustomersFilterProps> = ({ role }) => {
+   const dispatch = useAppDispatch();
+
+   const handleOnChange = (value: string) => {
+      dispatch(manageUserStore.actions.setDataFilter({ role, selectedFilter: { search: value } }));
+      dispatch(manageUserStore.firstFetchAction(role));
+   };
+
    return (
       <OutlinedInput
-         defaultValue=""
+         onChange={(e) => handleOnChange(e.target.value)}
          fullWidth
          placeholder="Search customer"
          startAdornment={
@@ -18,4 +33,6 @@ export function CustomersFilters(): React.JSX.Element {
          sx={{ maxWidth: '500px' }}
       />
    );
-}
+};
+
+export default React.memo(CustomersFilters);

@@ -5,7 +5,7 @@ import { UserAuth } from '@/types/auth';
 import { AddUserProps } from '@/types/mange-user';
 import { TableState } from '@/types/table-state';
 import { PayloadAction } from '@reduxjs/toolkit';
-import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
+import { all, call, fork, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { commonStore, manageUserStore } from '../slices';
 
 // this function will be call when the first going to manage commune, district, customer pages
@@ -40,6 +40,7 @@ function mappingTableData(recordList: any[]): UserAuth[] {
          role: item.role,
          email: item.email,
          state: extractEUserState(item.state.name),
+         amountPayable: item.amountPayable,
       })
    );
    return userList;
@@ -56,7 +57,7 @@ function* addUserIntoList({ payload }: PayloadAction<AddUserProps>) {
 }
 
 function* watchFirstFetch() {
-   yield takeEvery(manageUserStore.firstFetchAction, firstFetchListUser);
+   yield takeLatest(manageUserStore.firstFetchAction, firstFetchListUser);
 }
 
 function* watchAddUser() {

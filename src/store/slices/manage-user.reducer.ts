@@ -4,6 +4,7 @@ import {
    ManageUserReducer,
    SelectedFilter,
    SetLoadingTableProps,
+   SetSelectedFilterProps,
    SetUserListProps,
 } from '@/types/mange-user';
 import type { PayloadAction } from '@reduxjs/toolkit';
@@ -47,6 +48,11 @@ export const userSilce = createSlice({
          const { entityType, isLoading } = payload;
          state[entityType].tableState.loading = isLoading;
       },
+
+      setDataFilter: (state, { payload }: PayloadAction<SetSelectedFilterProps>) => {
+         const { role, selectedFilter } = payload;
+         state[role].selectedFilter = { ...state[role].selectedFilter, ...selectedFilter };
+      },
    },
 });
 
@@ -76,6 +82,8 @@ export const selectDataFilterByModelType = (role: ERole) =>
 export const firstFetchAction = createAction<ERole>(`${name}/FIRST_FETCH`);
 
 export const addUserAction = createAction<AddUserProps>(`${name}/ADD_USER`);
+
+export const searchUserAction = createAction<string>(`${name}/searchUserAction`);
 
 export const actions = userSilce.actions;
 

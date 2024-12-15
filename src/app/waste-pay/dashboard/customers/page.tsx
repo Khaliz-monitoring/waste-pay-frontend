@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import * as React from 'react';
 
 import AddUserDialog from '@/components/dashboard/createDIalog';
-import { CustomersFilters } from '@/components/dashboard/customer/customers-filters';
+import CustomersFilters from '@/components/dashboard/customer/customers-filters';
 import UserTable from '@/components/dashboard/customer/Table/UserTable';
 import { config } from '@/config';
 import { ERole } from '@/enums/role.enum';
@@ -25,7 +25,7 @@ export default function Page(): React.JSX.Element {
                <AddUserDialog role={role} />
             </Box>
          </Stack>
-         <CustomersFilters />
+         <CustomersFilters role={role} />
 
          <Grid container>
             <UserTable role={role} />
