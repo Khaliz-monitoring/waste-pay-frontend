@@ -1,8 +1,8 @@
 'use client';
 
+import { ERole } from '@/enums/role.enum';
 import { useAppDispatch } from '@/store/hooks';
 import { manageUserStore } from '@/store/slices';
-import { EntityType } from '@/types/mange-user';
 
 /**
  * fetch list user by entity type
@@ -11,7 +11,7 @@ import { EntityType } from '@/types/mange-user';
 export const useFetchListUser = () => {
    const dispatch = useAppDispatch();
 
-   const fetchListUserByEntity = (entityType: EntityType) => {
+   const fetchListUserByEntity = (entityType: ERole) => {
       dispatch(manageUserStore.firstFetchAction(entityType));
    };
 

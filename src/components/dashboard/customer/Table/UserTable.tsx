@@ -96,7 +96,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                  renderCell(params) {
                     return (
                        <>
-                          {params.row?.amountPayable ? (
+                          {params.row?.amountPayable == null || params.row?.amountPayable != 0 ? (
                              <span
                                 style={{
                                    // backgroundColor: ' 	#AD373B',
@@ -107,7 +107,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                                    color: 'rgb(185, 0, 0)',
                                 }}
                              >
-                                {`Còn nợ ${params.row?.amountPayable.toLocaleString()}đ`}
+                                {`Còn nợ ${params.row?.amountPayable?.toLocaleString()}đ`}
                              </span>
                           ) : (
                              <span
