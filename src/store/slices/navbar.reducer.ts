@@ -5,6 +5,8 @@ import { createAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../config';
 import { mangerNavItems, userNavItems } from '@/components/dashboard/layout/config';
 import { NavItemConfig } from '@/types/nav';
+import { accountStore } from '.';
+import { ERole } from '@/enums/role.enum';
 
 export const name = 'navbar';
 
@@ -33,6 +35,7 @@ export const userSilce = createSlice({
 /* =============== Selectors ================ */
 
 export const selectState = (state: RootState) => state[name];
+export const selectAccountStore = (state: RootState) => state[accountStore.name];
 
 export const selectCurrentWorkspace = createSelector(
    selectState,
@@ -44,8 +47,11 @@ export const selectWorkspaceOptions = createSelector(
    (state) => state.workspaceOptions
 );
 
-export const selectNavbarMenuItems = createSelector(selectState, (state): NavItemConfig[] =>
-   state.workspace === EWorkspace.User ? userNavItems : mangerNavItems
+export const selectNavbarMenuItems = createSelector(
+   selectState,
+   selectAccountStore,
+   (state, accountStore): NavItemConfig[] =>
+      accountStore.userInfo.role === ERole.USER ? userNavItems : mangerNavItems
 );
 
 /* =============== Actions ================ */

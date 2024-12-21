@@ -75,7 +75,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          field: 'phoneNumber',
          flex: 0.3,
          minWidth: 100,
-         headerName: 'Phone',
+         headerName: 'Số điện thoại',
          ...centerHeaderColumn,
       },
       {

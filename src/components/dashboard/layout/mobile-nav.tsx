@@ -5,7 +5,6 @@ import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { CaretUpDown as CaretUpDownIcon } from '@phosphor-icons/react/dist/ssr/CaretUpDown';
 import RouterLink from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
@@ -15,7 +14,8 @@ import { isNavItemActive } from '@/lib/is-nav-item-active';
 import { paths } from '@/paths';
 import type { NavItemConfig } from '@/types/nav';
 
-import { userNavItems } from './config';
+import { useAppSelector } from '@/store/hooks';
+import { navbarStore } from '@/store/slices';
 import { navIcons } from './nav-icons';
 
 export interface MobileNavProps {
@@ -26,7 +26,7 @@ export interface MobileNavProps {
 
 export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element {
    const pathname = usePathname();
-
+   const navItems = useAppSelector(navbarStore.selectNavbarMenuItems);
    return (
       <Drawer
          PaperProps={{
@@ -59,7 +59,7 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
             <Box component={RouterLink} href={paths.home} sx={{ display: 'inline-flex' }}>
                <Logo color="light" height={32} width={122} />
             </Box>
-            <Box
+            {/* <Box
                sx={{
                   alignItems: 'center',
                   backgroundColor: 'var(--mui-palette-neutral-950)',
@@ -79,11 +79,11 @@ export function MobileNav({ open, onClose }: MobileNavProps): React.JSX.Element 
                   </Typography>
                </Box>
                <CaretUpDownIcon />
-            </Box>
+            </Box> */}
          </Stack>
          <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
          <Box component="nav" sx={{ flex: '1 1 auto', p: '12px' }}>
-            {renderNavItems({ pathname, items: userNavItems })}
+            {renderNavItems({ pathname, items: navItems })}
          </Box>
          <Divider sx={{ borderColor: 'var(--mui-palette-neutral-700)' }} />
       </Drawer>

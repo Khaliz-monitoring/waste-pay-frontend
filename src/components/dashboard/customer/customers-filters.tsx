@@ -24,7 +24,7 @@ const CustomersFilters: React.FC<CustomersFilterProps> = ({ role }) => {
       <OutlinedInput
          onChange={(e) => handleOnChange(e.target.value)}
          fullWidth
-         placeholder="Search customer"
+         placeholder="Tìm kiếm theo hộ gia đình"
          startAdornment={
             <InputAdornment position="start">
                <MagnifyingGlassIcon fontSize="var(--icon-fontSize-md)" />

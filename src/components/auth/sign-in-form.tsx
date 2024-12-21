@@ -22,22 +22,28 @@ import { paths } from '@/paths';
 import { authClient } from '@/lib/auth/client';
 import { useUser } from '@/hooks/use-user';
 
+// Regex để kiểm tra số điện thoại
+const phoneRegex = /^(\+?\d{1,4}[\s-]?)?(\d{10,15})$/;
+
 const schema = zod.object({
-   email: zod.string().min(1, { message: 'Email is required' }),
-   password: zod.string().min(1, { message: 'Password is required' }),
+   emailOrPhone: zod
+      .string()
+      .min(1, { message: 'Vui lòng nhập email hoặc số điện thoại' })
+      .refine((value) => zod.string().email().safeParse(value).success || phoneRegex.test(value), {
+         message: 'Vui lòng nhập email hoặc số điện thoại hợp lệ',
+      }),
+   password: zod.string().min(1, { message: 'Vui lòng nhập mật khẩu' }),
 });
 
 type Values = zod.infer<typeof schema>;
 
-const defaultValues = { email: 'sofia@devias.io', password: 'Secret1' } satisfies Values;
+const defaultValues = { emailOrPhone: '', password: '' } satisfies Values;
 
 export function SignInForm(): React.JSX.Element {
    const router = useRouter();
-
    const { checkSession } = useUser();
 
-   const [showPassword, setShowPassword] = React.useState<boolean>();
-
+   const [showPassword, setShowPassword] = React.useState<boolean>(false);
    const [isPending, setIsPending] = React.useState<boolean>(false);
 
    const {
@@ -45,48 +51,46 @@ export function SignInForm(): React.JSX.Element {
       handleSubmit,
       setError,
       formState: { errors },
-   } = useForm<Values>({ defaultValues: null, resolver: zodResolver(schema) });
+   } = useForm<Values>({ defaultValues, resolver: zodResolver(schema) });
 
    const onSubmit = React.useCallback(
       async (values: Values): Promise<void> => {
          setIsPending(true);
 
-         const { error, accessToken } = await authClient.signInWithPassword({
-            email: values.email,
+         const { error } = await authClient.signInWithPassword({
+            email: values.emailOrPhone,
             password: values.password,
          });
 
          if (error) {
-            console.log('check token error');
             setError('root', { type: 'server', message: error });
             setIsPending(false);
             return;
          }
 
-         // Refresh the auth state
+         // Làm mới trạng thái xác thực
          await checkSession();
-
-         // UserProvider, for this case, will not refresh the router
-         // After refresh, GuestGuard will handle the redirect
-         // router.push(paths.dashboard.account);
       },
-      [checkSession, router, setError]
+      [checkSession, setError]
    );
 
    return (
       <Stack spacing={4}>
          <Stack spacing={1}>
-            <Typography variant="h4">Sign in</Typography>
+            <Typography variant="h4">Đăng nhập</Typography>
          </Stack>
          <form onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
                <Controller
                   control={control}
-                  name="email"
+                  name="emailOrPhone"
                   render={({ field }) => (
-                     <FormControl error={Boolean(errors.email)}>
-                        <InputLabel>Phone number</InputLabel>
-                        <OutlinedInput {...field} label="Email address" />
+                     <FormControl error={Boolean(errors.emailOrPhone)}>
+                        <InputLabel>Email hoặc số điện thoại</InputLabel>
+                        <OutlinedInput {...field} label="Email hoặc số điện thoại" />
+                        {errors.emailOrPhone ? (
+                           <FormHelperText>{errors.emailOrPhone.message}</FormHelperText>
+                        ) : null}
                      </FormControl>
                   )}
                />
@@ -95,7 +99,7 @@ export function SignInForm(): React.JSX.Element {
                   name="password"
                   render={({ field }) => (
                      <FormControl error={Boolean(errors.password)}>
-                        <InputLabel>Password</InputLabel>
+                        <InputLabel>Mật khẩu</InputLabel>
                         <OutlinedInput
                            {...field}
                            endAdornment={
@@ -103,21 +107,17 @@ export function SignInForm(): React.JSX.Element {
                                  <EyeIcon
                                     cursor="pointer"
                                     fontSize="var(--icon-fontSize-md)"
-                                    onClick={(): void => {
-                                       setShowPassword(false);
-                                    }}
+                                    onClick={(): void => setShowPassword(false)}
                                  />
                               ) : (
                                  <EyeSlashIcon
                                     cursor="pointer"
                                     fontSize="var(--icon-fontSize-md)"
-                                    onClick={(): void => {
-                                       setShowPassword(true);
-                                    }}
+                                    onClick={(): void => setShowPassword(true)}
                                  />
                               )
                            }
-                           label="Password"
+                           label="Mật khẩu"
                            type={showPassword ? 'text' : 'password'}
                         />
                         {errors.password ? (
@@ -128,12 +128,12 @@ export function SignInForm(): React.JSX.Element {
                />
                <div>
                   <Link component={RouterLink} href={paths.auth.resetPassword} variant="subtitle2">
-                     Forgot password?
+                     Quên mật khẩu?
                   </Link>
                </div>
                {errors.root ? <Alert color="error">{errors.root.message}</Alert> : null}
                <Button disabled={isPending} type="submit" variant="contained">
-                  Sign in
+                  Đăng nhập
                </Button>
             </Stack>
          </form>
