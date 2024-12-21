@@ -68,7 +68,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ role }) => {
             variant="contained"
             onClick={handleOpen}
          >
-            Add
+            Thêm hộ gia đình
          </Button>
 
          <Popover
@@ -103,7 +103,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ role }) => {
                      alignItems: 'center',
                   }}
                >
-                  <Typography sx={{ marginLeft: 1 }}>Add new User</Typography>
+                  <Typography sx={{ marginLeft: 1 }}>Thêm hộ gia đình mới</Typography>
                   <IconButton sx={{ borderRadius: 1 }} onClick={handleClose}>
                      <ClearIcon sx={{ width: 20, height: 20 }} />
                   </IconButton>
@@ -127,7 +127,7 @@ const AddUserDialog: React.FC<AddUserDialogProps> = ({ role }) => {
 
                <Box sx={{ display: 'flex', justifyContent: 'end', paddingX: 2, paddingBottom: 1 }}>
                   <Button variant="contained" disabled={!enableSubmit} onClick={handleSubmit}>
-                     Add
+                     Xác nhận
                   </Button>
                </Box>
             </Box>

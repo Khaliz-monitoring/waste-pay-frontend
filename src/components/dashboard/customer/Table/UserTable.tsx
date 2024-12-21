@@ -99,12 +99,15 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                           {params.row?.amountPayable == null || params.row?.amountPayable != 0 ? (
                              <span
                                 style={{
-                                   // backgroundColor: ' 	#AD373B',
-                                   border: '1px solid rgb(234, 85, 85)',
-                                   padding: '10px 20px',
-                                   borderRadius: 4,
+                                   backgroundColor: 'rgb(255, 219, 220)',
+
+                                   // border: '1px solid rgb(234, 85, 85)',
+                                   padding: '5px 15px',
+                                   borderRadius: 999,
                                    cursor: 'pointer',
                                    color: 'rgb(185, 0, 0)',
+
+                                   minWidth: 160,
                                 }}
                              >
                                 {`Còn nợ ${params.row?.amountPayable?.toLocaleString()}đ`}
@@ -112,9 +115,9 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                           ) : (
                              <span
                                 style={{
-                                   // backgroundColor: 'rgb(232, 255, 230)',
+                                   backgroundColor: 'rgb(232, 255, 230)',
                                    padding: '7px 15px',
-                                   borderRadius: 5,
+                                   borderRadius: 999,
                                    color: 'green',
                                 }}
                              >
