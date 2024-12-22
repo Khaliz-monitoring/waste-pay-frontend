@@ -13,6 +13,7 @@ import { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import StatusButton from './StatusButton';
 import { TableState } from '@/types/table-state';
+import { userNavItems } from '../../layout/config';
 
 interface UserTableProps {
    role: ERole;
@@ -109,6 +110,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
 
                                    minWidth: 160,
                                 }}
+                                onClick={(e) => redirectToUserPayment(params.row.id)}
                              >
                                 {`Còn nợ ${params.row?.amountPayable?.toLocaleString()}đ`}
                              </span>
@@ -119,7 +121,9 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                                    padding: '7px 15px',
                                    borderRadius: 999,
                                    color: 'green',
+                                   cursor: 'pointer',
                                 }}
+                                onClick={(e) => redirectToUserPayment(params.row.id)}
                              >
                                 Hoàn thành
                              </span>
@@ -141,6 +145,10 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          },
       },
    ];
+
+   const redirectToUserPayment = (userId: number) => {
+      window.open(`${paymentHref()}/${userId}`, '_blank');
+   };
 
    const handleChangePage = (pageNo: number) => {
       const tableData = { pageNo } as TableState;
@@ -167,6 +175,10 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          />
       </Grid>
    );
+};
+
+const paymentHref = () => {
+   return userNavItems.filter((e) => e.key === 'payment')[0].href;
 };
 
 export default UserTable;

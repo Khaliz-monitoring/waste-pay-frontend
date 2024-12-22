@@ -12,7 +12,12 @@ function* firstFetchListUser(payload: PayloadAction<ERole>) {
    const { userInfo } = yield all({
       userInfo: select(accountStore.selectUserInfo),
    });
-   const { data } = yield call(paymentApi.getPaymentsByUserId, userInfo.id);
+
+   const { userId } = yield all({
+      userId: select(paymentStore.selectUserId),
+   });
+
+   const { data } = yield call(paymentApi.getPaymentsByUserId, userId);
 
    const paymentList: Payment[] = mappingTableData(data.result);
 

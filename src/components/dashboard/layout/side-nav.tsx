@@ -14,8 +14,9 @@ import { paths } from '@/paths';
 import type { NavItemConfig } from '@/types/nav';
 
 import { useAppSelector } from '@/store/hooks';
-import { navbarStore } from '@/store/slices';
+import { accountStore, navbarStore } from '@/store/slices';
 import { navIcons } from './nav-icons';
+import { useUser } from '@/hooks/use-user';
 
 export function SideNav(): React.JSX.Element {
    const pathname = usePathname();
@@ -75,7 +76,7 @@ function renderNavItems({
       (acc: React.ReactNode[], curr: NavItemConfig): React.ReactNode[] => {
          const { key, ...item } = curr;
 
-         acc.push(<NavItem key={key} pathname={pathname} {...item} />);
+         acc.push(<NavItem key={key} pathname={pathname} {...item} hrefKey={key} />);
 
          return acc;
       },
@@ -91,6 +92,7 @@ function renderNavItems({
 
 interface NavItemProps extends Omit<NavItemConfig, 'items'> {
    pathname: string;
+   hrefKey: string;
 }
 
 function NavItem({
@@ -101,17 +103,36 @@ function NavItem({
    matcher,
    pathname,
    title,
+   hrefKey,
 }: NavItemProps): React.JSX.Element {
-   const active = isNavItemActive({ disabled, external, href, matcher, pathname });
+   const userId = useAppSelector(accountStore.selectUserId);
+
+   function hasNumber(str: string) {
+      return /\d/.test(str);
+   }
+
+   let adjustHref: string = href;
+   if (hrefKey === 'payment' && !hasNumber(href)) {
+      adjustHref = `${href}/${userId}`;
+   }
+
+   const active = isNavItemActive({
+      disabled,
+      external,
+      href: adjustHref,
+      matcher,
+      pathname,
+   });
+
    const Icon = icon ? navIcons[icon] : null;
 
    return (
       <li>
          <Box
-            {...(href
+            {...(adjustHref
                ? {
                     component: external ? 'a' : RouterLink,
-                    href,
+                    href: adjustHref,
                     target: external ? '_blank' : undefined,
                     rel: external ? 'noreferrer' : undefined,
                  }

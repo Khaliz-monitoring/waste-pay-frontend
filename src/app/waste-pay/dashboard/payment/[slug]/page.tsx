@@ -2,16 +2,18 @@ import Grid from '@mui/material/Unstable_Grid2';
 import type { Metadata } from 'next';
 import * as React from 'react';
 
-import UserTable from '@/components/dashboard/customer/Table/UserTable';
-import { config } from '@/config';
-import { EntityType } from '@/types/mange-user';
-import { Stack, Typography } from '@mui/material';
 import PaymentTable from '@/components/dashboard/payment/payment-table';
+import { config } from '@/config';
+import { Stack, Typography } from '@mui/material';
 
 export const metadata = { title: `Overview | Dashboard | ${config.site.name}` } satisfies Metadata;
 
-export default function Page(): React.JSX.Element {
-   const entityType = 'commune' as EntityType;
+export default async function Page({
+   params,
+}: {
+   params: Promise<{ slug: string }>;
+}): Promise<React.JSX.Element> {
+   const slug: number = Number((await params).slug);
 
    return (
       <Stack spacing={2}>
@@ -22,7 +24,7 @@ export default function Page(): React.JSX.Element {
          </Stack>
 
          <Grid container>
-            <PaymentTable />
+            <PaymentTable userId={slug} />
          </Grid>
       </Stack>
    );

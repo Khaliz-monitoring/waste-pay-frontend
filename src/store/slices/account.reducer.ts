@@ -199,6 +199,8 @@ export const selectUpdatedUserInfo = createSelector(selectState, (state) => stat
 
 export const selectUserInfo = createSelector(selectState, (state) => state.userInfo);
 
+export const selectUserId = createSelector(selectState, (state) => state.userInfo.id);
+
 export const selectAddress = createSelector(
    selectState,
    (state): Address => state.updatedUserInfo.address

@@ -8,10 +8,12 @@ export const name = 'payment';
 
 export type PaymentReducer = {
    tableState: TableState;
+   userId: number;
 };
 
 const initialState: PaymentReducer = {
    tableState: defaultTableState,
+   userId: null,
 };
 
 export const paymentSilce = createSlice({
@@ -24,6 +26,10 @@ export const paymentSilce = createSlice({
             ...payload,
          };
       },
+
+      setUserId: (state, { payload }: PayloadAction<number>) => {
+         state.userId = payload;
+      },
    },
 });
 
@@ -32,6 +38,8 @@ export const paymentSilce = createSlice({
 export const selectState = (state: RootState) => state[name];
 
 export const selectDataTable = createSelector(selectState, (state) => state.tableState);
+
+export const selectUserId = createSelector(selectState, (state) => state.userId);
 
 /* =============== Actions ================ */
 
