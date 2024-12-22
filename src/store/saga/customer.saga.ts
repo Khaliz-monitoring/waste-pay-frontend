@@ -11,6 +11,10 @@ import { commonStore, manageUserStore } from '../slices';
 // this function will be call when the first going to manage commune, district, customer pages
 function* firstFetchListUser(payload: PayloadAction<ERole>) {
    const role: ERole = payload.payload;
+   yield call(fetchListUser, role);
+}
+
+function* fetchListUser(role: ERole) {
    const { selectedFilter } = yield all({
       selectedFilter: select(manageUserStore.selectDataFilterByModelType(role)),
    });
@@ -50,6 +54,13 @@ function* addUserIntoList({ payload }: PayloadAction<AddUserProps>) {
    try {
       const { data } = yield call(manageUserApi.addUser, payload);
       yield put(commonStore.actions.setSuccessMessage(data.message));
+
+      // refresh data table
+      const { role } = payload;
+      const tableData = { pageNo: 1 } as TableState;
+      yield put(manageUserStore.actions.setUserList({ role, tableData }));
+
+      yield call(fetchListUser, role);
    } catch (error) {
       console.log(error);
       yield put(commonStore.actions.setErrorMessage(error.message));
