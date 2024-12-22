@@ -143,9 +143,8 @@ const UpdateUserDialog = () => {
       if (
          updatedUserInfo.fullName &&
          updatedUserInfo.phoneNumber &&
-         updatedUserInfo.password &&
-         !newPasswordError &&
-         !checkNewPasswordError &&
+         (user.state === EUserState.ACTIVE ||
+            (updatedUserInfo.password && !newPasswordError && !checkNewPasswordError)) &&
          updatedUserInfo.address.ward.fullName &&
          updatedUserInfo.address.fullName
       ) {
@@ -153,7 +152,7 @@ const UpdateUserDialog = () => {
       }
    };
 
-   console.log('render');
+   console.log(user);
 
    return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
@@ -279,9 +278,10 @@ const UpdateUserDialog = () => {
                      !(
                         updatedUserInfo.fullName &&
                         updatedUserInfo.phoneNumber &&
-                        updatedUserInfo.password &&
-                        !newPasswordError &&
-                        !checkNewPasswordError &&
+                        (user.state === EUserState.ACTIVE ||
+                           (updatedUserInfo.password &&
+                              !newPasswordError &&
+                              !checkNewPasswordError)) &&
                         updatedUserInfo.address.ward.fullName &&
                         updatedUserInfo.address.fullName
                      )

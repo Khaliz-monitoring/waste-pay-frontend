@@ -1,16 +1,13 @@
+import accountApi from '@/api/account.api';
 import administrativeLevelApi from '@/api/address.api';
 import { EAdministrativeLevel } from '@/enums/administrativeLevel.enum';
-import { ChangeAddressPayload } from '@/types/administrativeLevel';
-import { PayloadAction } from '@reduxjs/toolkit';
-import { all, call, fork, getContext, put, select, takeEvery } from 'redux-saga/effects';
-import { accountStore } from '../slices';
-import accountApi from '@/api/account.api';
-import { authClient } from '@/lib/auth/client';
-import { UserContext } from '@/contexts/user-context';
-import React from 'react';
-import { UserAuth } from '@/types/auth';
 import { extrackERole } from '@/enums/role.enum';
 import { extractEUserState } from '@/enums/user-state.enum';
+import { ChangeAddressPayload } from '@/types/administrativeLevel';
+import { UserAuth } from '@/types/auth';
+import { PayloadAction } from '@reduxjs/toolkit';
+import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
+import { accountStore, commonStore } from '../slices';
 
 function* fistFetchAdministrativeLevelData() {
    try {
@@ -72,6 +69,8 @@ function* submitUpdateUserInfo() {
       yield put(accountStore.actions.setUserInfo(user));
 
       yield put(accountStore.actions.setOpenUpdateUserDialog(false));
+
+      yield put(commonStore.actions.setSuccessMessage('Cập nhập thông tin thành công'));
    } catch (error) {
       console.log(error);
    }

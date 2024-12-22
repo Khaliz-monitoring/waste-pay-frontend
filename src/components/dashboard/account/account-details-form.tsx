@@ -1,23 +1,17 @@
 'use client';
 
-import * as React from 'react';
+import ExtenalLabelTextField from '@/components/common/ExtenalLabelTextField';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
+import { accountStore } from '@/store/slices';
+import { styled } from '@mui/material';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Select from '@mui/material/Select';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useUser } from '@/hooks/use-user';
-import ExtenalLabelTextField from '@/components/common/ExtenalLabelTextField';
-import { styled } from '@mui/material';
-import { useAppSelector } from '@/store/hooks';
-import { accountStore } from '@/store/slices';
+import * as React from 'react';
 
 const states = [
    { value: 'alabama', label: 'Alabama' },
@@ -35,11 +29,11 @@ const StyledExtenalLabelTextField = styled(ExtenalLabelTextField)(() => ({
 
 export function AccountDetailsForm(): React.JSX.Element {
    const user = useAppSelector(accountStore.selectUserInfo);
+   const dispatch = useAppDispatch();
 
-   const [openUpdateUser, setOpenUpdateUser] = React.useState(false);
-
-   const handleCloseUpdateUserDialog = () => {
-      setOpenUpdateUser(false);
+   const handleOpenUpdateUserDialog = () => {
+      dispatch(accountStore.actions.initUpdatedUserInfo());
+      //   dispatch(accountStore.actions.setOpenUpdateUserDialog(true));
    };
 
    return (
@@ -83,7 +77,9 @@ export function AccountDetailsForm(): React.JSX.Element {
             </CardContent>
             <Divider />
             <CardActions sx={{ justifyContent: 'flex-end' }}>
-               <Button variant="contained">Save details</Button>
+               <Button variant="contained" onClick={handleOpenUpdateUserDialog}>
+                  Cập nhập thông tin
+               </Button>
             </CardActions>
          </Card>
       </form>

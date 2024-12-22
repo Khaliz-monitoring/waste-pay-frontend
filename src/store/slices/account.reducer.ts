@@ -1,10 +1,10 @@
 import { createAction, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { EUserState } from '@/enums/user-state.enum';
 import { Option } from '@/types';
+import { ChangeAddressPayload } from '@/types/administrativeLevel';
 import { Address, UserAuth } from '@/types/auth';
 import { RootState } from '../config';
-import { ChangeAddressPayload } from '@/types/administrativeLevel';
-import { EUserState } from '@/enums/user-state.enum';
 
 export const name = 'account';
 export const resetState = createAction(`${name}/'RESET_STATE'}`);
@@ -108,9 +108,7 @@ const commonSlice = createSlice({
        * init updated user info
        */
       initUpdatedUserInfo(state) {
-         if (state.userInfo.state === EUserState.INACTIVE) {
-            state.openUpdateUserInfoDialog = true;
-         }
+         state.openUpdateUserInfoDialog = true;
 
          state.updatedUserInfo = {
             ...state.userInfo,
