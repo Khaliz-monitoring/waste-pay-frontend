@@ -18,12 +18,12 @@ export const mangerNavItems = [
    // },
    { key: 'account', title: 'Tài Khoản', href: paths.dashboard.account, icon: 'user' },
 
-   { key: 'settings', title: 'Cài Đặt', href: paths.dashboard.settings, icon: 'gear-six' },
+   // { key: 'settings', title: 'Cài Đặt', href: paths.dashboard.settings, icon: 'gear-six' },
 ] satisfies NavItemConfig[];
 
 export const userNavItems = [
    { key: 'account', title: 'Tài Khoản', href: paths.dashboard.account, icon: 'user' },
    { key: 'payment', title: 'Thanh Toán', href: paths.dashboard.payment, icon: 'payment' },
 
-   { key: 'settings', title: 'Cài Đặt', href: paths.dashboard.settings, icon: 'gear-six' },
+   // { key: 'settings', title: 'Cài Đặt', href: paths.dashboard.settings, icon: 'gear-six' },
 ] satisfies NavItemConfig[];

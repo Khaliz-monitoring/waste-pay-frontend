@@ -5,6 +5,7 @@ import navbar from './navbar.reducer';
 import account from './account.reducer';
 import administrateLevel from './administrate-level.reducer';
 import payment from './payment.reducer';
+import mainbar from './main-bar.reducer';
 
 const rootReducers = combineReducers({
    [common.name]: common.reducer,
@@ -13,6 +14,7 @@ const rootReducers = combineReducers({
    [account.name]: account.reducer,
    [administrateLevel.name]: administrateLevel.reducer,
    [payment.name]: payment.reducer,
+   [mainbar.name]: mainbar.reducer,
 });
 
 export type RootReducerType = ReturnType<typeof rootReducers>;

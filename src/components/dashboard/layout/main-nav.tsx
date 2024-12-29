@@ -16,7 +16,7 @@ import { usePopover } from '@/hooks/use-popover';
 
 import { MobileNav } from './mobile-nav';
 import { UserPopover } from './user-popover';
-import { NotifyPopover } from './notify-popup';
+import NotifyPopover from './notify-popup';
 import { getAvatar } from '@/utils/get-avatar.utils';
 import { useUser } from '@/hooks/use-user';
 

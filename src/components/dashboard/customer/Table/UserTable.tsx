@@ -77,15 +77,15 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          flex: 0.3,
          minWidth: 100,
          headerName: 'Số điện thoại',
-         ...centerHeaderColumn,
+         ...centerColumn,
       },
-      {
-         field: 'manager',
-         flex: 0.3,
-         minWidth: 100,
-         headerName: 'Quản Lý',
-         ...centerHeaderColumn,
-      },
+      // {
+      //    field: 'manager',
+      //    flex: 0.3,
+      //    minWidth: 100,
+      //    headerName: 'Quản Lý',
+      //    ...centerHeaderColumn,
+      // },
       ...(role === ERole.USER
          ? [
               {
