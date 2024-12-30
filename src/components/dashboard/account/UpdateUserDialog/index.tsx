@@ -152,8 +152,6 @@ const UpdateUserDialog = () => {
       }
    };
 
-   console.log(user);
-
    return (
       <Dialog open={open} onClose={handleClose} maxWidth="lg">
          <Box sx={{ padding: '20px 40px', width: 800 }}>

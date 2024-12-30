@@ -20,16 +20,18 @@ function mappingNotification(recordList: any[]): Notification {
    let totalUnread = 0;
    recordList.forEach((item) => {
       list.push({
+         notificationId: item.id,
          fullName: item.sender?.fullName,
          avatar: item.sender?.avatar,
          role: item.sender?.role,
-         isRead: item.isRead,
+         isRead: item.read,
          message: item.message,
          time: item.time,
+         userId: item.sender ? item.sender?.id : item.recipient?.id,
       });
 
       // count notify is not read
-      if (!item.isRead) {
+      if (!item.read) {
          totalUnread++;
       }
    });

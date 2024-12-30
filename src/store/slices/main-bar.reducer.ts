@@ -15,12 +15,14 @@ export type Notification = {
 };
 
 export type NotificationItem = {
+   notificationId: number;
    fullName: string;
    role: ERole;
    message: string;
    isRead: boolean;
    avatar: string;
    time: string;
+   userId: number;
 };
 
 const notifications: Notification = {

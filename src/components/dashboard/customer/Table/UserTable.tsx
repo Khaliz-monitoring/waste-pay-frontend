@@ -5,6 +5,7 @@ import AppDataTable from '@/components/DataTable/AppDataGridPro';
 import { ERole } from '@/enums/role.enum';
 import { useAppDispatch } from '@/store/hooks';
 import { manageUserStore } from '@/store/slices';
+import { TableState } from '@/types/table-state';
 import { centerColumn, centerHeaderColumn } from '@/utils/columnProperties';
 import { getAvatar } from '@/utils/get-avatar.utils';
 import { stringAvatar } from '@/utils/string-avatar';
@@ -12,8 +13,7 @@ import { Avatar, Box, Grid } from '@mui/material';
 import { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import StatusButton from './StatusButton';
-import { TableState } from '@/types/table-state';
-import { userNavItems } from '../../layout/config';
+import { useRedirectToUserPayment } from '@/hooks/use-redirect-manager-payment';
 
 interface UserTableProps {
    role: ERole;
@@ -22,6 +22,7 @@ interface UserTableProps {
 const UserTable: React.FC<UserTableProps> = ({ role }) => {
    const dispatch = useAppDispatch();
    const dataTable = useSelector(manageUserStore.selectTableData(role));
+   const redirectToUserPayment = useRedirectToUserPayment();
 
    // fetch data table
    useLayoutEffect(() => {
@@ -110,7 +111,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
 
                                    minWidth: 160,
                                 }}
-                                onClick={(e) => redirectToUserPayment(params.row.id)}
+                                onClick={(e) => redirectToUserPayment.redirect(params.row.id)}
                              >
                                 {`Còn nợ ${params.row?.amountPayable?.toLocaleString()}đ`}
                              </span>
@@ -123,7 +124,7 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
                                    color: 'green',
                                    cursor: 'pointer',
                                 }}
-                                onClick={(e) => redirectToUserPayment(params.row.id)}
+                                onClick={(e) => redirectToUserPayment.redirect(params.row.id)}
                              >
                                 Hoàn thành
                              </span>
@@ -145,10 +146,6 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          },
       },
    ];
-
-   const redirectToUserPayment = (userId: number) => {
-      window.open(`${paymentHref()}/${userId}`, '_blank');
-   };
 
    const handleChangePage = (pageNo: number) => {
       const tableData = { pageNo } as TableState;
@@ -175,10 +172,6 @@ const UserTable: React.FC<UserTableProps> = ({ role }) => {
          />
       </Grid>
    );
-};
-
-const paymentHref = () => {
-   return userNavItems.filter((e) => e.key === 'payment')[0].href;
 };
 
 export default UserTable;

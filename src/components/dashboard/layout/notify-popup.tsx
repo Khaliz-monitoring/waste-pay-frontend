@@ -16,6 +16,8 @@ import CircleIcon from '@mui/icons-material/Circle';
 import { Avatar, Badge, IconButton, Tooltip } from '@mui/material';
 import { Bell as BellIcon } from '@phosphor-icons/react/dist/ssr/Bell';
 import { useLayoutEffect } from 'react';
+import { ERole } from '@/enums/role.enum';
+import { useRedirectToUserPayment } from '@/hooks/use-redirect-manager-payment';
 
 const NotifyPopover = () => {
    const dispatch = useAppDispatch();
@@ -65,15 +67,22 @@ const NotifyPopover = () => {
 };
 
 const NotifyItem: React.FC<NotificationItem> = ({
+   notificationId,
    fullName,
    role,
    avatar,
    message,
    time,
    isRead,
+   userId,
 }) => {
+   const redirectToUserPayment = useRedirectToUserPayment();
+
    return (
-      <MenuItem sx={{ display: 'flex', gap: 1, alignItems: 'start', py: 2 }}>
+      <MenuItem
+         sx={{ display: 'flex', gap: 1, alignItems: 'start', py: 2 }}
+         onClick={() => redirectToUserPayment.redirect(userId, notificationId)}
+      >
          {avatar ? (
             <Avatar src={getAvatar(avatar)} style={{ marginTop: '4px' }} />
          ) : (
@@ -90,7 +99,7 @@ const NotifyItem: React.FC<NotificationItem> = ({
                }}
             >
                <Typography sx={{ fontWeight: 500, display: fullName ? 'inline' : 'none' }}>
-                  {`${fullName} - ${role} `}{' '}
+                  {`${fullName}${role !== ERole.USER ? ' - ' : ''}${role !== ERole.USER ? role : ''} `}
                </Typography>
                {message}
             </Typography>
