@@ -12,7 +12,7 @@ const SummaryInfo = () => {
       if (userInfo.amountPayable === 0) {
          return 'Đã thanh toán đầy đủ';
       } else {
-         return `Còn nợ: ${userInfo.amountPayable?.toLocaleString()} đồng`;
+         return `Còn nợ : ${userInfo.amountPayable?.toLocaleString()} đồng`;
       }
    };
 
