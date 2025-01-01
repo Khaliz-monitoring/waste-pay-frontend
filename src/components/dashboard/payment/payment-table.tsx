@@ -81,7 +81,7 @@ const PaymentTable: React.FC<PaymentTableProps> = ({ userId }) => {
    return (
       <Grid
          container
-         sx={{ height: `calc(100vh - 150px)`, width: '100%', flexDirection: 'column' }}
+         sx={{ height: `calc(100vh - 219px)`, width: '100%', flexDirection: 'column' }}
       >
          <AppDataTable rows={tableState.rows} columns={columns} getRowId={(params) => params?.id} />
          <DataTablePagination

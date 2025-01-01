@@ -5,6 +5,7 @@ import { TableState } from '@/types/table-state';
 import { PayloadAction } from '@reduxjs/toolkit';
 import { all, call, fork, put, select, takeEvery } from 'redux-saga/effects';
 import { accountStore, paymentStore } from '../slices';
+import { mappingUserInfo } from './customer.saga';
 
 // this function will be call when the first going to manage commune, district, customer pages
 function* firstFetchListUser(payload: PayloadAction<ERole>) {
@@ -19,7 +20,7 @@ function* firstFetchListUser(payload: PayloadAction<ERole>) {
 
    const { data } = yield call(paymentApi.getPaymentsByUserId, userId);
 
-   const paymentList: Payment[] = mappingTableData(data.result);
+   const { paymentList, user } = mappingData(data.result);
 
    const tableData = {
       rows: paymentList,
@@ -27,12 +28,16 @@ function* firstFetchListUser(payload: PayloadAction<ERole>) {
    } as unknown as TableState;
 
    yield put(paymentStore.actions.setTableState(tableData));
+   yield put(paymentStore.actions.setUserInfo(user));
 }
 
-function mappingTableData(recordList: any[]): Payment[] {
-   let paymentList: Payment[] = [];
-   recordList.forEach((item) =>
-      paymentList.push({
+function mappingData(rawData: any) {
+   let payments: Payment[] = [];
+
+   const { paymentList, userInfo } = rawData;
+
+   paymentList.forEach((item) =>
+      payments.push({
          id: item.id,
          amount: item.amount,
          billMonth: `Tháng ${item.billingMonth} ${item.billingYear}`,
@@ -41,7 +46,10 @@ function mappingTableData(recordList: any[]): Payment[] {
          isPaid: item.isPaid,
       })
    );
-   return paymentList;
+
+   const user = mappingUserInfo(userInfo);
+
+   return { user, paymentList: payments };
 }
 
 function* handlePay({ payload }: PayloadAction<number>) {

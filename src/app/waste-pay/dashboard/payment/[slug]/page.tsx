@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import * as React from 'react';
 
 import PaymentTable from '@/components/dashboard/payment/payment-table';
+import SummaryInfo from '@/components/dashboard/payment/summary-info';
 import { config } from '@/config';
 import { Stack, Typography } from '@mui/material';
 
@@ -22,6 +23,8 @@ export default async function Page({
                <Typography variant="h4">Thanh Toán</Typography>
             </Stack>
          </Stack>
+
+         <SummaryInfo />
 
          <Grid container>
             <PaymentTable userId={slug} />

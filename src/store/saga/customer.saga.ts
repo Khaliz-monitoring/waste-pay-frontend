@@ -32,22 +32,24 @@ function* fetchListUser(role: ERole) {
 
 function mappingTableData(recordList: any[]): UserAuth[] {
    let userList: UserAuth[] = [];
-   recordList.forEach((item) =>
-      userList.push({
-         id: item.id,
-         firstName: item.firstname,
-         lastName: item.lastname,
-         fullName: item.fullName,
-         phoneNumber: item.phoneNumber,
-         avatar: item.avatar,
-         address: item?.address,
-         role: item.role,
-         email: item.email,
-         state: extractEUserState(item.state.name),
-         amountPayable: item.amountPayable,
-      })
-   );
+   recordList.forEach((item) => userList.push(mappingUserInfo(item)));
    return userList;
+}
+
+export function mappingUserInfo(rawData: any): UserAuth {
+   return {
+      id: rawData.id,
+      firstName: rawData.firstname,
+      lastName: rawData.lastname,
+      fullName: rawData.fullName,
+      phoneNumber: rawData.phoneNumber,
+      avatar: rawData.avatar,
+      address: rawData?.address,
+      role: rawData.role,
+      email: rawData.email,
+      state: extractEUserState(rawData.state.name),
+      amountPayable: rawData.amountPayable,
+   };
 }
 
 function* addUserIntoList({ payload }: PayloadAction<AddUserProps>) {
