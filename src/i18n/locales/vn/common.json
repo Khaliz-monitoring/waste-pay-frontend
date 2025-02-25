@@ -1,5 +1,9 @@
 {
    "common": {
       "go": "Đi"
+   },
+   "label": {
+      "totalUsers": "Số người dùng",
+      "paidUsers": "Đã thanh toán"
    }
 }

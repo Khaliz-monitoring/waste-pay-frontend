@@ -5,3 +5,4 @@ export * as administrativeLevelStore from './administrate-level.reducer';
 export * as accountStore from './account.reducer';
 export * as paymentStore from './payment.reducer';
 export * as mainbarStore from './main-bar.reducer';
+export * as statisticalStore from './statistical.reducer';
